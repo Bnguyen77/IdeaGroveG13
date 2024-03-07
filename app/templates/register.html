@@ -1,0 +1,80 @@
+{% extends "partials/_layout.html" %}
+{% include "partials/_header.html" %}
+
+{% block content %}
+
+
+<h1>Register page</h1>
+<div class="container">
+    <div class="row justify-content-center">
+        
+        <div class="col-md-4">
+            <div class="card mt-3 shadow" id="reg-inner" style="opacity: 0.8;">
+                <div class="card-body py-4 px-md-4">
+
+                    <!-- Registration Form -->
+                    <form method="POST" action=""  enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+
+                        <div class="row" id="reg-box">
+                            <!-- User_name and Name inputs on the same row -->
+                            <div class="form-outline mb-3 col-md-12">
+                                <h5>{{ form.user_name.label(class="form-label") }}</h5>
+                                {{ form.user_name(class="form-control") }}
+                                {% for error in form.user_name.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="form-outline mb-3 col-md-12">
+                                <h5>{{ form.name.label(class="form-label") }}</h5>
+                                {{ form.name(class="form-control") }}
+                                {% for error in form.name.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Email input on a separate row -->
+                            <div class="form-outline mb-3 col-md-12">
+                                <h5>{{ form.email.label(class="form-label") }}</h5>
+                                {{ form.email(class="form-control") }}
+                                {% for error in form.email.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Password and Confirm Password inputs on the same row -->
+                            <div class="form-outline mb-3 col-md-12">
+                                <h5>{{ form.password.label(class="form-label") }}</h5>
+                                {{ form.password(class="form-control") }}
+                                {% for error in form.password.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="form-outline mb-3 col-md-12">
+                                <h5>{{ form.repassword.label(class="form-label") }}</h5>
+                                {{ form.repassword(class="form-control") }}
+                                {% for error in form.repassword.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Buttons in the same row but adjusted position -->
+                            <div class="bt-row">
+                                <button type="submit" class="btn btn-outline-success" id="bt">
+                                    Register
+                                </button>
+                                <a href="{{  url_for('auth_controller.login') }}" class="btn btn-outline-primary" id="bt">
+                                    Login Page
+                                </a>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add any additional scripts or links to external JS files if needed -->
+{% endblock %}

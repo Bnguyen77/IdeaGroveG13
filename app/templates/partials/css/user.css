@@ -1,0 +1,123 @@
+.bio-box {
+	margin: auto;
+	margin-top: 2%;
+	width: 70%;
+	/* padding: 10px; */
+	/* border: solid 5px rgba(245, 245, 245, 0.4); */
+	border-radius: 0;
+	height: 600px;
+	position: relative;
+	overflow: hidden;
+	background-color: rgba(240, 240, 240, 0.8);
+	display: flex;
+}
+
+.profile-box {
+	background-color: rgba(76, 75, 75, 1);
+}
+
+.profile-img {
+	/* background-color: aquamarine; */
+	background-image: url("{{ url_for('static', filename='img/bios/profile-pic.jpg') }}");
+	background-size: cover;
+	box-shadow: 15px 28px 43px 0px rgba(0, 0, 0, 0.75);
+	border-radius: 50%;
+	border: 5px solid wheat ;
+	background-repeat: no-repeat;
+	overflow: hidden;
+	position: absolute;
+	top: 8%;
+	left: 3%;
+	margin: 10px;
+	height: 55%;
+	width: 30%;
+
+	pointer-events: none;
+}
+.profile-img:hover {
+	background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+		url("{{ url_for('static', filename='img/bios/profile-pic.jpg') }}");
+	scale: 1.1;
+}
+
+.edit-logo {
+	border-radius: 50%;
+	position: absolute;
+	background-color: rgba(65, 64, 64, 0.5);
+	z-index: 1;
+	top: 52%;
+	left: 25%;
+	pointer-events: auto;
+}
+
+.edit-logo:hover {
+	transform: scale(1.2);
+	background-color: rgba(251, 251, 251, 0.5);
+	top: 51%;
+	left: 24%;
+}
+
+.bg-img {
+	/* background-color: blanchedalmond; */
+	object-fit: cover; /* Ensure the image covers the entire container */
+	opacity: 0.8;
+	background-image: url("{{ url_for('static', filename='img/bios/profile-bg.jpg') }}");
+	/* border: solid 5px rgb(12, 12, 12); */
+	/* border-radius: 3% ; */
+	overflow: hidden;
+	position: absolute;
+	background-size: contain;
+	background-repeat: no-repeat;
+	top: 0;
+	left: 0;
+	width: 1400px;
+	height: 330px;
+}
+
+.bio-info-left {
+	position: relative;
+	text-align: center;
+	flex: 0 0 35%;
+	height: 100%;
+	top: 65%;
+	bottom: 0;
+	left: 1%;
+	/* background-color: beige; */
+	padding: 20px;
+}
+
+.bio-info-right {
+	position: relative;
+	padding: 20px 0 0 0;
+	flex: 0 0 65%;
+	height: 100%;
+	top: 55%;
+	bottom: 0;
+	left: 30;
+	/* background-color:antiquewhite; */
+}
+
+#skills {
+	padding: 10px;
+	/* margin: 10px; */
+	width: 100%;
+	background-color: rgb(243, 240, 240);
+}
+
+.modal-body {
+	height: 700px;
+}
+
+#edit-btn {
+	position: relative;
+	top: 85%;
+	left: 80%;
+	margin: 20px;
+}
+
+#bio-text {
+    padding-right: 20px;
+    overflow: auto;
+    width: 98%;
+    height: 120px;
+}

@@ -1,0 +1,17 @@
+
+	{% with messages = get_flashed_messages() %} 
+	{% if messages %}
+	 {% for msg in messages %}
+
+
+		<div
+			class="alert alert-info alert-dismissible fade show"
+			id="toast"
+			data-bs-dismiss="alert"
+			role="alert"
+		>
+			<strong>{{ msg }}</strong>
+		</div>
+	
+	{% endfor %} {% endif %} {% endwith %}	
+

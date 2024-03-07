@@ -1,0 +1,304 @@
+body {
+    background-image: url("{{ url_for('static', filename='img/bg1.jpg') }}");
+    /* background-color: rgb(249, 249, 245); */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height:100%;
+    width:100%;
+    margin:0;
+    padding:0;
+}
+
+.navbar{
+    opacity: 0.9;
+    padding: 5px; 
+}
+
+.offcanvas-header{
+    padding: 16px 5px 16px 5px;
+}
+
+.offcanvas-header a{
+    margin-left: 11px;
+}
+#jumbotron-button:hover,
+.offcanvas-header a:hover{
+    transform: scale(1.2);
+}
+#nav-logo{
+    color:  rgba(180, 177, 177, 0.5);
+}
+#nav-logo:hover{
+    transform: scale(1.1); 
+    color:  rgba(225, 225, 225, 0.9);
+}
+
+#toast {
+    -moz-animation: cssAnimation 0s ease-in 5s forwards;
+    /* Firefox */
+    -webkit-animation: cssAnimation 0s ease-in 5s forwards;
+    /* Safari and Chrome */
+    -o-animation: cssAnimation 0s ease-in 5s forwards;
+    /* Opera */
+    animation: cssAnimation 0s ease-in 5s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    animation-duration: 1s;
+}
+
+#toast {
+    z-index: 1001;
+    overflow: hidden;
+    text-align: center;
+    position: fixed; top: 11%; left: 0;padding: 5px 10px 5px 10px; width: 100% ;box-shadow: 25px -20px 38px -14px rgba(130,125,130,0.6);
+}
+@keyframes cssAnimation {
+    55%{
+        width: 15%;
+        border: 0;
+        overflow:hidden;
+        /* background-color: rgba(0, 0, 0, 0.9); */
+    }to{
+        width:0;
+        height:0;
+        padding:0;
+        border: 0;
+        /* background-color: rgba(0, 0, 0, 0.2); */
+        overflow:hidden;
+    }
+}
+@-webkit-keyframes cssAnimation {
+    to {
+        width:0;
+        height:0;
+        padding:0;
+        visibility:hidden;
+    }
+}
+
+.nav-link{
+    /* background-color: blue; */
+    position: relative;
+    float: right;
+}
+
+#log-out{
+    font-weight: 500;
+	padding: 7px 15px 7px 15px;
+	border: solid 3px; position: relative; margin-right:10px;
+}
+
+#offcanvasDarkNavbar{
+    width: 300px;
+}
+
+
+.hero-box:hover {
+    .hero-text{
+        transition-duration: 2000ms;
+        text-align: center;
+        top: 25%;
+        left: 25%;
+        transform: scale(1.2);
+    }
+    .hero-image{
+        transition-duration: 2000ms;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6)), url("{{ url_for('static', filename='img/bg4.jpg') }}");
+    }
+    #group-members {
+        opacity: 0; /* Initially set to transparent */
+        visibility: visible;
+        transition-delay: 1000ms;
+        transition-duration: 2000ms;
+    }
+
+    &:hover #group-members {
+        opacity: 1; /* Fade in on hover */
+    }
+
+}
+
+/* Place text in the middle of the image */
+.hero-text {
+    position: absolute;
+    top: 40%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    color: white;
+  }
+
+  #group-members{
+    visibility: hidden;
+  }
+  
+
+  .hero-image {
+    /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url("{{ url_for('static', filename='img/bg4.jpg') }}");
+    /* Set a specific height */
+    height: 80%;
+    margin-top: 60px;
+    /* Position and center the image to scale nicely on all screens */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+  }
+
+
+
+.about-us-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+#card-box{
+    white-space: nowrap;
+    background-color: rgba(255, 255, 255, 0.2);
+    width: 100%;
+    height: 550px;
+    padding-top: 10px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.card-item{
+    white-space: wrap;
+    width: 220px;
+    height: 70%;
+    display: inline-block;
+    float: none;
+   background-color: rgba(255, 255, 255, 0.5); 
+   box-shadow: 25px -20px 38px -14px rgb(14, 14, 14);
+   border-radius: 3%;
+   padding: 25px;
+   margin: 70px 5px 15px 20px;
+}
+
+
+.card-item:hover{
+    transition-duration: 500ms;
+    transform: scale(1.3);
+    color: whitesmoke;
+    background-color: rgba(70, 70, 70, 0.9);
+    box-shadow: 32px 47px 21px -5px rgba(54,54,77,1);
+    padding: 10px;
+    margin: 70px 40px 15px 70px; 
+}
+
+.card-item img{
+    opacity: 0.8;
+    border-radius: 3%;
+    margin: 0px 0px 10px 0px;
+    height: 45%;
+    width: 100%;
+}
+
+
+#carouselExampleIndicators {
+    width: 100%; /* Adjust to your preference */
+    height: 70%;
+    margin: auto; /* Center the carousel */
+    list-style-type: none;
+    margin-bottom: 100px;
+  }
+
+#carouselExampleIndicators li{
+    list-style-type: none;
+  }
+
+#carouselExampleIndicators:hover{
+    background-color: rgba(0, 0, 0, 0.8);
+    .carousel-inner img{
+        opacity: 0.4;
+    }
+    #c-text{
+        visibility:visible;
+    }
+  }
+
+#c-text{
+    visibility: hidden;
+}
+
+  .carousel-inner img {
+    width: 600px; /* Set the desired width */
+    height: 480px; /* Set the desired height */
+    object-fit: cover; 
+    opacity: 0.9;
+  }
+
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 10%;
+  }
+
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    scale: 1.5;
+    font-weight: 40px; 
+  }
+
+
+  .custom-jumbotron {
+    padding: 50px;
+    background-color: rgba(255, 255, 255, 0.7); /* Off-white and almost transparent */
+  }
+
+  #jumbotron-button {
+    font-weight: 500;
+    padding: 7px 30px 7px 30px;
+    border: solid 3px;
+  }
+
+
+.modal-footer{
+    height: 100px;
+}
+
+#reg-box{
+    padding: 0%;
+
+}
+#reg-inner{
+    position: absolute;
+    left: 0%;
+    top: 5%;
+    bottom: 10%;
+    /* margin-top: 30px; */
+    padding: 30px 10px 20px 0px;
+    height: 95%;
+    width: 350px;
+    background-color:  rgba(0, 0, 0, 0.9);
+    color:  rgba(255, 255, 255, 0.9);
+}
+
+#reg-inner h5{
+    margin-bottom: 0px;
+}
+
+.bt-row {
+    position: absolute;
+    width: 90%; padding: 10px 20px 10px 20px;
+    left:10;
+    bottom: 30;
+}
+
+#bt{
+    font-weight: 700;
+    width: 100%; 
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#bt:hover {
+    transform: scale(1.2);
+    border: 3px solid rgb(105, 105, 105);
+}
+
+

@@ -1,0 +1,44 @@
+# Python-specific ignores
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore Python virtual environments
+venv/
+env/
+
+# Ignore compiled Python files
+*.pyc
+
+# Ignore the database configuration file
+db.sqlite
+
+# Ignore environment-specific files
+.env
+
+# Ignore files and directories generated during the build process
+node_modules/
+dist/
+build/
+
+# Ignore instance directory
+instance/*
+
+# Ignore specific files in the instance directory
+!instance/README
+!instance/some_other_file
+
+# Ignore local configuration files
+config/local_config.json
+
+# Ignore logs and databases
+*.log
+*.db
+
+# OS-specific ignores
+.DS_Store
+Thumbs.db

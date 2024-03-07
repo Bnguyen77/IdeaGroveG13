@@ -1,0 +1,50 @@
+<!-- Modal -->
+<div
+	class="modal fade"
+	id="editModal"
+	tabindex="-1"
+	role="dialog"
+	aria-labelledby="editModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog" role="document">
+		<div class="modal-content" style="height: 370px; padding: 5px;">
+			<div class="modal-header" style="padding: 30px">
+				<h5
+					class="modal-title"
+					id="editModalLabel"
+					style="position: absolute; left: 80%"
+				>
+					Edit User
+				</h5>
+			</div>
+			<div class="modal-body">
+				<!-- Your form goes here -->
+				<form method="POST" action="{{ url_for('auth_controller.add_bio') }}">
+					<textarea
+						name="bio"
+						placeholder=" add your bio"
+						style="width: 100%; padding: 10px ;height: 15%;"
+					></textarea>
+					<label for="skills">Select Skills:</label>
+					<div style="display: flex; flex-wrap: wrap; max-height: 150px; overflow-y: auto;">
+						{% for tag in available_tags %}
+							<div style="margin: 5px;">
+								<input type="checkbox" class="btn-check" id="btn-check-{{ tag.id }}" autocomplete="off">
+								<label class="btn btn-outline-primary" value="{{ tag.id }}" for="btn-check-{{ tag.id }}">{{ tag.name }}</label>
+							</div>
+						{% endfor %}
+					</div>
+			
+
+					<input
+						type="submit"
+						class="btn btn-primary"
+						id="edit-btn"
+						value="Submit"
+					/>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,42 @@
+<div class="bio-box">
+	<div class="bg-img"></div>
+	<div class="profile-box">
+		<div class="profile-img" id="profile-img">
+	
+		</div>
+		<a
+		class="edit-logo"
+		href="#"
+		data-toggle="modal"
+		data-target="#editModal"
+	>
+		<img src="/static/logos/edit_white.svg" alt="edit-logo" />
+	</a>
+	</div>
+
+	<div class="bio-info-left">
+		<h4 class="display-5">Hi, {{ session['user_name'] }} !</h4>
+		<h5>{{ session['email'] }}</h5>
+	</div>
+
+	<div class="bio-info-right">
+		<div id="skills">
+			<h2>Skill:</h2>
+		</div>
+
+		<h2>Bio:</h2>
+		{% if session['bio'] is none %}
+		<h2>Edit your bio</h2>
+
+		{% else %}
+
+		<h5 id = "bio-text" >{{ session['bio'] }}</h5>
+
+		{% endif %}
+
+		<!-- <p>{{ session['bio'] }}</p>  -->
+		<!-- <p>Cras placerat orci vel augue pharetra consectetur. Sed eget erat eget enim lobortis fringilla. Praesent faucibus ante quis massa varius, et lobortis nulla vestibulum. Phasellus pellentesque tellus quam. Suspendisse lobortis leo at turpis malesuada, eget fringilla nunc commodo. Nullam tristique dolor quis libero gravida pulvinar. Aenean gravida libero odio, eget tincidunt leo bibendum quis. Quisque malesuada faucibus turpis, dapibus fermentum dolor facilisis eu.</p> -->
+	</div>
+
+	{% include 'partials/_user_partials/_edit_modal.html' %}
+</div>

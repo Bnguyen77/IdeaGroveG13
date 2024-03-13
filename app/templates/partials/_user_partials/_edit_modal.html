@@ -8,7 +8,7 @@
 	aria-hidden="true"
 >
 	<div class="modal-dialog" role="document">
-		<div class="modal-content" style="height: 370px; padding: 5px;">
+		<div class="modal-content" style="height: 370px; padding: 5px">
 			<div class="modal-header" style="padding: 30px">
 				<h5
 					class="modal-title"
@@ -24,18 +24,35 @@
 					<textarea
 						name="bio"
 						placeholder=" add your bio"
-						style="width: 100%; padding: 10px ;height: 15%;"
+						style="width: 100%; padding: 10px; height: 15%"
 					></textarea>
 					<label for="skills">Select Skills:</label>
-					<div style="display: flex; flex-wrap: wrap; max-height: 150px; overflow-y: auto;">
+					<div
+						style="
+							display: flex;
+							flex-wrap: wrap;
+							max-height: 150px;
+							overflow-y: auto;
+						"
+					>
 						{% for tag in available_tags %}
-							<div style="margin: 5px;">
-								<input type="checkbox" class="btn-check" id="btn-check-{{ tag.id }}" autocomplete="off">
-								<label class="btn btn-outline-primary" value="{{ tag.id }}" for="btn-check-{{ tag.id }}">{{ tag.name }}</label>
-							</div>
+						<div style="margin: 5px">
+							<input
+								type="checkbox"
+								name="tags"
+								class="btn-check"
+								id="btn-check-{{ tag.id }}"
+								autocomplete="off"
+							/>
+							<label
+								class="btn btn-outline-primary"
+								value="{{ tag.name }}"
+								for="btn-check-{{ tag.id }}"
+								>{{ tag.name }}</label
+							>
+						</div>
 						{% endfor %}
 					</div>
-			
 
 					<input
 						type="submit"

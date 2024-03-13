@@ -1,27 +1,34 @@
+<style>
+	.thicker-text {
+		font-weight: bold; /* Make the text thicker */
+	}
+	</style>
+	
 <div class="bio-box">
 	<div class="bg-img"></div>
 	<div class="profile-box">
-		<div class="profile-img" id="profile-img">
-	
-		</div>
-		<a
-		class="edit-logo"
-		href="#"
-		data-toggle="modal"
-		data-target="#editModal"
-	>
-		<img src="/static/logos/edit_white.svg" alt="edit-logo" />
-	</a>
+		<div class="profile-img" id="profile-img"></div>
+		<a class="edit-logo" href="#" data-toggle="modal" data-target="#editModal">
+			<img src="/static/logos/edit_white.svg" alt="edit-logo" />
+		</a>
 	</div>
 
 	<div class="bio-info-left">
-		<h4 class="display-5">Hi, {{ session['user_name'] }} !</h4>
-		<h5>{{ session['email'] }}</h5>
+		<!-- <h4 class="display-5">Hi, {{ session['user_name'] }} !</h4> -->
+		<!-- <h5>{{ session['email'] }}</h5> -->
+		<h4 class="display-5">Hi, Nikhil !</h4>
+		<h5> nikhil23@uic.edu</h5>
 	</div>
 
 	<div class="bio-info-right">
 		<div id="skills">
-			<h2>Skill:</h2>
+			<h2>Skill: 
+				<button type="button" class="btn btn-outline-primary thicker-text" disabled>HTML:5</button>
+				<button type="button" class="btn btn-outline-primary thicker-text" disabled>css</button>
+				<button type="button" class="btn btn-outline-primary thicker-text" disabled>.NET</button>
+				<button type="button" class="btn btn-outline-primary thicker-text" disabled>Python</button>
+				<button type="button" class="btn btn-outline-primary thicker-text" disabled>NODE.js</button>
+			</h2>
 		</div>
 
 		<h2>Bio:</h2>
@@ -30,7 +37,7 @@
 
 		{% else %}
 
-		<h5 id = "bio-text" >{{ session['bio'] }}</h5>
+		<h5 id="bio-text">{{ session['bio'] }}</h5>
 
 		{% endif %}
 

@@ -1,8 +1,82 @@
+<style>
+	.post-container {
+		background-image: linear-gradient(
+			rgba(255, 255, 255, 0.9),
+			rgba(255, 255, 255, 0.5)
+		);
+		display: flex;
+		width: 70%; /* Set the overall width to 70% of the page */
+		margin: auto; /* Center the post container horizontally */
+		margin-top: 50px;
+	}
 
+	.profile-picture {
+		margin: 10px; /* Adjust the margin as needed */
+		border-radius: 50%;
+		overflow: hidden;
+		width: 75px; /* Adjust the width as needed */
+		height: 75px; /* Adjust the height as needed */
+	}
 
+	.profile-picture img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.post-form {
+		opacity: 0.9;
+		/* Your existing styles for the post form */
+		/* Add padding, border, background color, etc. as needed */
+		flex-grow: 9; /* Allow the post-form to take remaining space */
+	}
+	#post-title {
+		height: 40px;
+		width: 400px;
+		margin: 10px 0;
+	}
+	#post-text {
+		width: 100%;
+		/* Your existing styles for the textarea */
+		/* Make the textarea take the full width of the post-form */
+	}
+
+	#post-btn {
+		width: 150px;
+		padding: 5px 15px;
+		position: relative;
+		left: 80%;
+		/* Your existing styles for the button */
+	}
+
+	#feed-box {
+		margin-left: 20px;
+		margin-top: 10px;
+		width: 100%;
+		padding: 20px;
+	}
+</style>
 <div class="post-container">
-    <div class="post-form">
-        <textarea id="post-text" placeholder="Write your post here..."></textarea>
-        <button onclick="createPost()">Post</button>
-    </div>
+	<div class="profile-picture">
+		<!-- Add your profile picture here -->
+		<img src="/static/img/bios/profile-pic5.jpg" alt="Profile Picture" />
+	</div>
+
+	<div class="post-form">
+		<input type="text" id="post-title" placeholder="Enter a title" />
+		<textarea
+			id="post-text"
+			placeholder="Describe your idea here..."
+		></textarea>
+		<button id="post-btn" onclick="createPost()">Post your idea</button>
+	</div>
+</div>
+
+<div id="feed-box">
+	{% include "partials/main_partials/_feed.html" %} {% include
+	"partials/main_partials/_feed1.html" %} 
+	{% include
+	"partials/main_partials/_feed2.html" %}
+	{% include
+	"partials/main_partials/_email_modal.html" %}
 </div>

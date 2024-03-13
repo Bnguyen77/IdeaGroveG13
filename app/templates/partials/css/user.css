@@ -18,7 +18,7 @@
 
 .profile-img {
 	/* background-color: aquamarine; */
-	background-image: url("{{ url_for('static', filename='img/bios/profile-pic.jpg') }}");
+	background-image: url("{{ url_for('static', filename='img/bios/profile-pic5.jpg') }}");
 	background-size: cover;
 	box-shadow: 15px 28px 43px 0px rgba(0, 0, 0, 0.75);
 	border-radius: 50%;

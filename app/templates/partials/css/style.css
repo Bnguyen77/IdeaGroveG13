@@ -230,6 +230,8 @@ body {
     width: 600px; /* Set the desired width */
     height: 480px; /* Set the desired height */
     object-fit: cover; 
+    display: inline;
+    align-self: center;
     opacity: 0.9;
   }
 

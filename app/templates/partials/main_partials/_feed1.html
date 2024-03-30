@@ -1,0 +1,62 @@
+<style>
+	.feed-container {
+		display: flex;
+		width: 70%;
+		margin: auto;
+		border: 1px solid #ccc; /* Add border for feed container */
+		padding: 10px; /* Add padding for feed container */
+	}
+
+	.profile-picture1 {
+		overflow: hidden;
+		border-radius: 50%;
+		width: 70px;
+		height: 70px;
+		margin: 10px;
+		flex-grow: 1;
+	}
+
+	.profile-picture1 img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.feed-content {
+		width: 85%;
+
+		padding: 10px;
+		flex-grow: 8;
+	}
+
+	h3 {
+		margin-top: 0;
+	}
+
+	/* Style for feed title and description */
+	.feed-content h3 {
+		font-size: 18px;
+		margin-bottom: 5px;
+	}
+
+	.feed-content p {
+		font-size: 16px;
+		margin-top: 0;
+	}
+</style>
+
+<div class="feed-container">
+	<div class="profile-picture1">
+		<!-- Add the profile picture of the user who made the post -->
+		<img src="/static/img/bios/profile-pic2.jpg" alt="Profile Picture" />
+	</div>
+	<div class="feed-content">
+		<!-- Display the title and description of the post made by other user -->
+		<h3>Need help with backend for .NET application</h3>
+		<p>
+			for my final grad project, I would like to enhance my knowledge in .NET framework by making a restAPI website for school pantry,
+            However, I need some help with database and model control (heavily implemented in .NET), few free to reach out. any input helps!
+		</p>
+		<button class="btn btn-primary" id="existingButton">request for collaboration</button>
+	</div>
+</div>

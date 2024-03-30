@@ -1,0 +1,70 @@
+
+<style>
+    .feed-container {
+        display: flex;
+        width: 70%;
+        margin: auto;
+        border: 1px solid #ccc; /* Add border for feed container */
+        padding: 10px; /* Add padding for feed container */
+        background-image: linear-gradient( rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.6));
+    }
+    
+    .profile-picture1 {
+        background-image: linear-gradient( rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
+        overflow: hidden;
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+        margin: 10px;
+        flex-grow: 1;
+    }
+    
+    .profile-picture1 img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .feed-content {
+        background-image: linear-gradient( rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9));
+        width: 85%;
+        padding: 10px;
+        flex-grow: 8;
+    }
+    
+    h3 {
+        margin-top: 0;
+    }
+    
+    /* Style for feed title and description */
+    .feed-content h3 {
+        font-size: 40px;
+        margin-bottom: 5px;
+    }
+    
+    .feed-content p {
+        margin-left: 20px;
+        font-size: 16px;
+        margin-top: 0;
+    }
+    
+</style>
+
+<div class="feed-container">
+	<div class="profile-picture1">
+		<!-- Add the profile picture of the user who made the post -->
+		<img
+			src="/static/img/bios/profile-pic1.jpg"
+			alt="Profile Picture"
+		/>
+	</div>
+	<div class="feed-content">
+		<!-- Display the title and description of the post made by other user -->
+		<h3>Business idea- Online Cookie store? </h3>
+		<p>Introducing SweetCrave - your ultimate online cookie destination! Indulge in our premium, artisanal cookies crafted with love and top-quality ingredients. With flavors ranging from classic chocolate chip to exotic delights, there's something for everyone. Partner with SweetCrave to enhance your business's offerings and delight your customers with our irresistible treats. Join us in spreading joy, one delicious cookie at a time!</p>
+        <button class="btn btn-primary">request for collaboration</button>
+
+    </div>
+</div>
+
+

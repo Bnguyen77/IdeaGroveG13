@@ -40,6 +40,13 @@ class Post(db.Model):
     def get_collaboration_posts (cls):
         return cls.query.filter_by(is_question = False).all()
     
+    @classmethod
+    def create_post(cls, title, content, user_id):
+        new_post = cls(title=title, content=content, user_id=user_id)
+        db.session.add(new_post)
+        db.session.commit()
+        return new_post
+    
 
 post_tag = db.Table('post_tag',
     db.Column('post_id', db.Integer, db.ForeignKey('post.id')),

@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 import os
+from flask_avatars import Avatars
 # Create SQLAlchemy instances
 db = SQLAlchemy()
 
@@ -12,12 +13,14 @@ def init_app(app):
 
     from .user import User
     from .post import Post
-    from .tag import Tag    # Initialize the SQLAlchemy database
+    from .tag import Tag   
+        # Initialize the SQLAlchemy database
     db.init_app(app)
+    avatars = Avatars(app)
 
     # Create the database tables
     with app.app_context():
-        Tag.create_initial_tags()
+    
         db.create_all()
         
 

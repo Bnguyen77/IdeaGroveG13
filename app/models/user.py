@@ -2,6 +2,15 @@ from . import db
 from flask_avatars import Identicon
 from flask import current_app
 import os
+import random
+import string
+
+def random_string(length=5, additional_string=''):
+    random_part = ''.join(random.choices(string.ascii_letters, k=length))
+    combined_string = random_part + additional_string
+    combined_list = list(combined_string)
+    random.shuffle(combined_list)
+    return ''.join(combined_list)
 
 
 class User(db.Model):
@@ -11,6 +20,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     bio = db.Column(db.Text, nullable=True)  # Added bio field
+    avatar = db.relationship('Avatar', backref='user', uselist=False)
     skills = db.relationship(
         'Tag', secondary='user_skills', backref=db.backref('users', lazy='dynamic'))
 
@@ -31,9 +41,16 @@ class User(db.Model):
     @classmethod
     def get_user_by_email(cls, email):
         return cls.query.filter_by(email=email).first()
-
+    
+    
+    def add_skills(self, tag_ids):
+        from .tag import Tag
+        selected_tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
+        self.skills = selected_tags
+        db.session.commit() 
+    
     def generate_avatar(self):
-        # Generate a random Identicon avatar URL
+    # Generate a random Identicon avatar URL
         avatar = Identicon()
         # Assuming you have a configuration variable for the save path
         path = current_app.config['AVATARS_SAVE_PATH']
@@ -47,7 +64,7 @@ class User(db.Model):
                 if os.path.exists(previous_avatar_path):
                     os.remove(previous_avatar_path)
         # Generate new avatar URLs for all three sizes
-        fileNames = avatar.generate(text = self.user_name)
+        fileNames = avatar.generate(text=random_string(5, self.user_name))
         # Assuming fileNames contains URLs for small, medium, and large avatars
         avatar_urls = fileNames[:3]
         # Create or update the avatar associated with the user
@@ -62,6 +79,7 @@ class User(db.Model):
             )
         db.session.commit()
 
+   
 
 class Avatar(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -1,0 +1,57 @@
+
+{% extends "partials/_layout.html" %} {% include "partials/_header.html" %}
+{%block content%}
+<!-- User is in session -->
+<h2>Welcome, {{ session['user_name'] }}!</h2>
+
+{% include "partials/main_partials/_post.html" %}
+
+<div id = "filter-box" style="width: 70%; margin: 5px auto; 
+height: 30px; border: 2px solid white">
+<label for="category-select">Filter by Category:</label>
+<select id="category-select" onchange="location = this.value;"
+style="float: right; padding: 5px; margin-right: 10px">
+    <option value="{{ url_for('post_controller.get_posts', category='all') }}">All Posts</option>
+    <option value="{{ url_for('post_controller.get_posts', category='related') }}">Most Related</option>
+    <option value="{{ url_for('post_controller.get_posts', category='lastest') }}">lastest to earliest</option>
+    <option value="{{ url_for('post_controller.get_posts', category='earliest') }}">earliest to lastest</option>
+    <!-- Add more options for different categories -->
+</select>
+</div>
+
+<div id="feed-box" style = "margin-left: 20px; 
+width: 100%;
+padding: 20px;">
+
+
+    {% for post in posts %}
+    {% with post_data=post %}
+        {% include "partials/main_partials/_feed.html" %}
+    {% endwith %}    
+    {%endfor%}
+	
+</div>
+
+<script>
+    function filterPosts() {
+        var select = document.getElementById("category-select");
+        var selectedValue = select.value;
+
+        // Send AJAX request to post_controller route
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    // Replace the feed-box content with the filtered posts
+                    document.getElementById("feed-box").innerHTML = xhr.responseText;
+                } else {
+                    console.error('Request failed:', xhr.statusText);
+                }
+            }
+        };
+        xhr.open('GET', '/post_controller/filter_posts?category=' + selectedValue, true);
+        xhr.send();
+    }
+</script>
+
+ {%endblock%}

@@ -9,7 +9,8 @@
 >
 	<div class="modal-dialog" role="document">
 		<div class="modal-content" style="height: 370px; padding: 5px">
-			<div class="modal-header" style="padding: 30px">
+			<div class="modal-header" style="padding: 10px">
+				
 				<h5
 					class="modal-title"
 					id="editModalLabel"
@@ -21,6 +22,11 @@
 			<div class="modal-body">
 				<!-- Your form goes here -->
 				<form method="POST" action="{{ url_for('auth_controller.add_bio') }}">
+					
+					<div class="check-form" id="avatar-change">
+						<input class="form-check-input" type="checkbox" value="on" name="avatar-change" id="flexCheckIndeterminate">
+						<label class="form-check-label" for="flexCheckIndeterminate">change Avatar  </label>
+					</div>
 					<textarea
 						name="bio"
 						placeholder=" add your bio"
@@ -41,6 +47,7 @@
 								type="checkbox"
 								name="tags"
 								class="btn-check"
+								value="{{ tag.id }}"
 								id="btn-check-{{ tag.id }}"
 								autocomplete="off"
 							/>
@@ -53,7 +60,8 @@
 						</div>
 						{% endfor %}
 					</div>
-
+					
+				
 					<input
 						type="submit"
 						class="btn btn-primary"

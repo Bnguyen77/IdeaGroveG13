@@ -10,11 +10,12 @@
     }
     
     .profile-picture1 {
+        border: 3px solid rgb(116, 116, 116);
         background-image: linear-gradient( rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
         overflow: hidden;
         border-radius: 50%;
-        width: 70px;
-        height: 70px;
+        width: 40px;
+        height: 40px;
         margin: 10px;
         flex-grow: 1;
     }
@@ -47,22 +48,41 @@
         font-size: 16px;
         margin-top: 0;
     }
+
+    #colab-btn {
+        float: right;
+    }
+
+    .badge-sm {
+        float: right;
+        font-size: 0.75rem; /* Adjust the font size as needed */
+        padding: 0.2rem 0.5rem; /* Adjust the padding as needed */
+    }
     
 </style>
 
+
 <div class="feed-container">
+
 	<div class="profile-picture1">
 		<!-- Add the profile picture of the user who made the post -->
-		<img
-			src="/static/img/bios/profile-pic1.jpg"
-			alt="Profile Picture"
-		/>
+        <span  tabindex="0" data-toggle="tooltip" title="{{post_data.user.name}}">
+            <img 
+            id="avatar"
+            src="{{ url_for('static', filename='avatars/' + post_data.user.avatar.avatar_url_s) }}"
+            alt="Avatar"
+        />
+        </span>
 	</div>
 	<div class="feed-content">
 		<!-- Display the title and description of the post made by other user -->
-		<h3>Business idea- Online Cookie store? </h3>
-		<p>Introducing SweetCrave - your ultimate online cookie destination! Indulge in our premium, artisanal cookies crafted with love and top-quality ingredients. With flavors ranging from classic chocolate chip to exotic delights, there's something for everyone. Partner with SweetCrave to enhance your business's offerings and delight your customers with our irresistible treats. Join us in spreading joy, one delicious cookie at a time!</p>
-        <button class="btn btn-primary">request for collaboration</button>
+		<h4>{{post_data.title}}
+            {% for tag in post_data.tags%}
+            <span class="badge bg-info badge-sm">{{tag.name}}</span>
+            {%endfor%}
+        </h4>
+		<p>{{post_data.content}}</p>
+        <button class="btn btn-primary" id="colab-btn">request for collaboration</button>
 
     </div>
 </div>

@@ -17,7 +17,7 @@ def index():
         available_tags = Tag.query.all()
         posts = Post.query.all()
         user_skills = user.get_user_skills()
-        
+
         # Apply filtering logic for posts
         category = request.args.get('category')
         if category == "related":
@@ -27,11 +27,11 @@ def index():
         elif category == "earliest":
             posts = Post.query.order_by(Post.creation_date).all()
         else:
-            posts = Post.query.all()
-            
+            posts = Post.query.order_by(desc(Post.creation_date)).all()
+
         messages = Message.query.filter_by(recipient_id=user_id).all()
-            
-        return render_template("dashboard.html", user = user, available_tags=available_tags, messages = messages, posts = posts)
+
+        return render_template("dashboard.html", user=user, available_tags=available_tags, messages=messages, posts=posts)
     else:
         return render_template("index.html")
 
@@ -50,11 +50,7 @@ def user():
         user_id = session.get('user_id')
         available_tags = Tag.query.all()
         user = User.query.get(user_id)
-        
-        return render_template("user.html", user= user, available_tags=available_tags)
+
+        return render_template("user.html", user=user, available_tags=available_tags)
     else:
         return redirect(url_for("auth_controller.login"))
-
-
-
-

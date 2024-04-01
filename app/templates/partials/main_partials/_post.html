@@ -18,6 +18,11 @@
 		overflow: hidden;
 		width: 85px; /* Adjust the width as needed */
 		height: 80px; /* Adjust the height as needed */
+		transition: transform 0.3s ease;
+	}
+
+	.profile-picture:hover{
+		transform: scale(1.1);
 	}
 
 	.profile-picture img {
@@ -62,7 +67,7 @@
 	#tag-container {
 		border-right: 4px solid rgb(207, 207, 207);
 		padding: 5px 0px;
-		inline-size: 85%;
+		inline-size: 80%;
 		display: flex; /* Use flexbox to control layout */
 		flex-wrap: wrap; /* Allow tags to wrap into multiple lines */
 		white-space: nowrap; /* Prevent wrapping */
@@ -91,6 +96,8 @@
 		float: right;
 	}
 
+
+
 	    /* CSS for unchecked badges */
 		.tag-item input[type="checkbox"] + label {
 			background-color: #6c757d; /* Set to badge-secondary color */
@@ -108,14 +115,15 @@
 
 
 <div class="post-container">
-	<div class="profile-picture">
+	<div class="profile-picture">	
+		<a href="{{ url_for('views.user_route') }}">
 		<img
 			id="avatar"
 			src="{{ url_for('static', filename='avatars/' + user.avatar.avatar_url_s) }}"
 			alt="Avatar"
 		/>
+	</a>
 	</div>
-	
 	<form class="post-form" method="POST" action="{{ url_for('post_controller.create_post') }}">
 		<input type="text" id="post-title" name="title" placeholder="Enter a title" required/>
 		<div class="form-check form-switch" id = "is-question">

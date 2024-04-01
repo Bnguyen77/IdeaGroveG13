@@ -62,12 +62,21 @@
 				<ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
 					<li class="nav-item">
 						<a
-							class="nav-link active"
-							aria-current="page"
-							href="{{ url_for('views.index') }}"
-							>Home</a
+						class="nav-link active"
+						aria-current="page"
+						href="{{ url_for('views.index') }}"
+						>Home</a
 						>
 					</li>
+					{% if 'user_id' in session %}
+					<li class="nav-item">
+						<a class="nav-link active" aria-current="page" href="#" data-toggle="modal" data-target="#messagesModal">Messages</a>
+					</li>
+
+					<!-- Modal -->
+
+					{% endif %}
+
 					<li class="nav-item">
 						<a class="nav-link" href="#about-us">about us!</a>
 					</li>
@@ -91,16 +100,9 @@
 						</ul>
 					</li>
 				</ul>
-				<!-- <form class="d-flex mt-3" role="search">
-					<input
-						class="form-control me-2"
-						type="search"
-						placeholder="Search"
-						aria-label="Search"
-					/>
-					<button class="btn btn-success" type="submit">Search</button>
-				</form>  -->
+			
 			</div>
 		</div>
 	</div>
 </nav>
+

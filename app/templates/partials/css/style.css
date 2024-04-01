@@ -1,7 +1,7 @@
 body {
     background-image: url("{{ url_for('static', filename='img/bg1.jpg') }}");
-    /* background-color: rgb(249, 249, 245); */
     background-size: cover;
+    overflow-x: hidden;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -9,6 +9,7 @@ body {
     width:100%;
     margin:0;
     padding:0;
+   
 }
 
 .navbar{

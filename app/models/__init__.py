@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_avatars import Avatars
+from flask_migrate import Migrate
 # Create SQLAlchemy instances
 db = SQLAlchemy()
 
@@ -14,8 +15,11 @@ def init_app(app):
     from .user import User
     from .post import Post
     from .tag import Tag   
+    from .message import Message   
+    from .notification import Notification
         # Initialize the SQLAlchemy database
     db.init_app(app)
+    migrate = Migrate(app, db)
     avatars = Avatars(app)
 
     # Create the database tables
@@ -23,7 +27,7 @@ def init_app(app):
     
         db.create_all()
         
-
+    return app
     
     
 

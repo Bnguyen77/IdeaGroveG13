@@ -41,6 +41,27 @@ class Post(db.Model):
         return cls.query.filter_by(is_question = False).all()
     
     @classmethod
+    def get_most_related_posts(cls,user_skills):
+        # Retrieve all posts from the database
+        all_posts = cls.query.all()
+
+        # Calculate similarity scores for each post
+        related_posts = []
+        for post in cls.query.all():
+            post_tags_id = set(tag.id for tag in post.tags)
+            user_skills_id = set(skill.id for skill in user_skills)
+            similarity_score = len(post_tags_id.intersection(user_skills_id))
+            related_posts.append((post, similarity_score))
+
+        # Sort the related posts based on the similarity score in descending order
+        related_posts.sort(key=lambda x: x[1], reverse=True)
+
+        # Extract only the Post objects from the sorted list
+        sorted_posts = [post[0] for post in related_posts]
+        return sorted_posts
+    
+    
+    @classmethod
     def create_post(cls, title, content, user_id):
         new_post = cls(title=title, content=content, user_id=user_id)
         db.session.add(new_post)

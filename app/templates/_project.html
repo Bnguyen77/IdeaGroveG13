@@ -161,11 +161,39 @@ form.float-right{
         {% if user and post.user_id == user.id %}
         <!-- Edit button for the author -->
         
-        <button class="btn btn-primary project-btn">Edit Post</button>
+        <button class="btn btn-primary project-btn"   data-bs-toggle="modal" data-bs-target="#editModal {{ post.id }}">Edit Post</button>
         {% else %}
         <!-- Button for non-author users -->
         <!-- <button class="btn btn-secondary project-btn">Another Action</button> -->
         {% endif %}
+        <div class="modal fade" id="editModal" tabindex="" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel" style="font-size: 1.2em;">Edit Order Details <span id="orderIdDisplay"></span></h5> <!-- Increase font size -->
+            </div>
+            <div class="modal-body" style=" display: flex;
+			justify-content: center; padding: 10px; width: auto;"> <!-- Increase padding -->
+                <input type="hidden" id="orderIdInput">
+
+				
+                <div class="form-group editB">
+					<strong><label for="allergiesInput"  class="float-right">Allergies:</label></strong>
+                    <ul id="allergiesList"></ul>
+                </div>
+                <div class="form-group editB">
+					<strong><label for="dietaryRestrictionInput" class="float-right">Dietary Restrictions:</label></strong>
+                    <ul id="dietaryList"  ></ul>
+                </div>
+                <!-- Add other fields for editing -->
+            </div>
+			<div class="modal-footer">
+				<button type="button " id="saveBtn" class="btn btn-primary float-right ">Save Changes</button>
+				<button type="button " id="deleteBtn" class="btn btn-danger float-right ">Delete Order</button>
+			</div>
+        </div>
+    </div>
+    </div>
     </div>
    
     
@@ -210,7 +238,7 @@ form.float-right{
                 <form action="{{ url_for('message_controller.handle_message', message_id=message.id, post_id = post.id, action='delete') }}"  class="float-right"method="post" >
                     <button class="btn btn-danger" type="submit">Delete</button>
                 </form>
-                <form action="{{ url_for('message_controller.handle_message', message_id=message.id, post_id = post.id, action='delete') }}" class="float-right" method="post" >
+                <form action="{{ url_for('message_controller.handle_message', message_id=message.id, post_id = post.id, action='edit') }}" class="float-right" method="post" >
                     <button class="btn btn-primary" type="submit">Edit</button>
                 </form>
                 {% elif post.message_status(user.id) == 1 %}

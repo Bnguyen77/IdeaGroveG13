@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_avatars import Avatars
+from flask_migrate import Migrate
 # Create SQLAlchemy instances
 db = SQLAlchemy()
 
@@ -8,22 +9,26 @@ db = SQLAlchemy()
 def init_app(app):
     # Configure the Flask app
     app.config['SECRET_KEY'] = 'your_secret_key'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///local1.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///local.db'
     app.config['TEMPLATES_AUTO_RELOAD'] = True  # Ensure that templates are auto-reloaded during development
 
     from .user import User
     from .post import Post
     from .tag import Tag   
+    from .message import Message   
+    from .notification import Notification
         # Initialize the SQLAlchemy database
     db.init_app(app)
+    migrate = Migrate(app, db)
     avatars = Avatars(app)
 
     # Create the database tables
     with app.app_context():
     
         db.create_all()
-        
-
+        Tag.create_initial_tags()
+   
+    return app
     
     
 

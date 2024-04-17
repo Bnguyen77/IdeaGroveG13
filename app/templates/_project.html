@@ -1,0 +1,250 @@
+{% extends "partials/_layout.html" %} {% include "partials/_header.html" %}
+{%block content%}
+
+
+<style>
+.profile-picture {
+    margin: 10px; /* Adjust the margin as needed */
+    border-radius: 50%;
+    border: 3px solid rgb(116, 116, 116);
+    overflow: hidden;
+    width: 85px; /* Adjust the width as needed */
+    height: 80px; /* Adjust the height as needed */
+    transition: transform 0.3s ease;
+}
+.profile-picture:hover{
+    transform: scale(1.1);
+}
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+    .user-box{
+        display: flex;
+        align-items: center;
+        margin: auto;
+        margin-top: 60px;
+        width: 70%;
+        height: 15%;
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+	}
+	.user-info{
+		width: 50%;
+		height: 80%; /* Adjust height to match the user box height */
+	}
+
+#project-box{
+    display: flex;
+    width: 60%;
+    margin: auto;
+    max-height: 400px;
+    height: 300px;
+     background-color: rgba(255, 255, 255, 0.7);
+      
+}
+.project-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.float-right {
+    margin-right: 5px;
+    float: right;
+}
+form.float-right{
+    margin: 0;
+    padding-right: 5px;
+    
+}
+.inner-left {
+    padding: 20px;
+    flex: 75%;
+}
+
+.inner-right {
+    position: relative;
+    padding: 20px;
+    flex: 25%;
+ 
+}
+
+.profile-picture-coll {
+    width: 30px; /* Adjust size as needed */
+    height: 30px; /* Adjust size as needed */
+    border-radius: 50%; /* Make it circular */
+    border: 1px black solid;
+    margin-right: 5px; /* Add some space between the picture and the name */
+}
+#message-box{
+    width: 60%;
+    background-color: rgba(240, 240, 240, 0.7);
+    margin: auto;
+    max-height: 400px;
+    height: 350px;
+    padding: 20px;
+}
+#post-content{
+    padding: 5px;
+    margin-left: 15px;
+    background-color: aliceblue;
+    border-radius: 10px;
+    border: 2px beige solid;
+    overflow-y: auto; /* Add vertical scrollbar if content exceeds height */
+    max-height: 150px; /* Set maximum height for the content */
+}
+
+#tag-box {
+    margin: 10px;
+    padding: 5px;
+}
+
+.bold-text {
+    font-size: medium;
+    font-weight: bold;
+}
+</style>
+
+
+<div class="user-box">
+	<div class="profile-picture">	
+		<a href="{{ url_for('views.user_route') }}">
+		<img
+			id="avatar"
+			src="{{ url_for('static', filename='avatars/' + user.avatar.avatar_url_s) }}"
+			alt="Avatar"
+		/>
+	</a>
+	</div>
+	<div class="user-info">
+		<h3> {{user.name}}</h3>
+		<h6> @ {{user.email}}</h6>
+	</div>
+</div>
+
+<div id="project-box" >
+    <div class="inner-left">
+        <div id="post-title" style="margin-bottom: 10px;">
+            <h5>Title: {{post.title}}</h5>
+        </div>
+        <div id="post-author" style="margin-bottom: 10px;">
+            <h6><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-feather" viewBox="0 0 16 16">
+                <path d="M15.807.531c-.174-.177-.41-.289-.64-.363a3.8 3.8 0 0 0-.833-.15c-.62-.049-1.394 0-2.252.175C10.365.545 8.264 1.415 6.315 3.1S3.147 6.824 2.557 8.523c-.294.847-.44 1.634-.429 2.268.005.316.05.62.154.88q.025.061.056.122A68 68 0 0 0 .08 15.198a.53.53 0 0 0 .157.72.504.504 0 0 0 .705-.16 68 68 0 0 1 2.158-3.26c.285.141.616.195.958.182.513-.02 1.098-.188 1.723-.49 1.25-.605 2.744-1.787 4.303-3.642l1.518-1.55a.53.53 0 0 0 0-.739l-.729-.744 1.311.209a.5.5 0 0 0 .443-.15l.663-.684c.663-.68 1.292-1.325 1.763-1.892.314-.378.585-.752.754-1.107.163-.345.278-.773.112-1.188a.5.5 0 0 0-.112-.172M3.733 11.62C5.385 9.374 7.24 7.215 9.309 5.394l1.21 1.234-1.171 1.196-.027.03c-1.5 1.789-2.891 2.867-3.977 3.393-.544.263-.99.378-1.324.39a1.3 1.3 0 0 1-.287-.018Zm6.769-7.22c1.31-1.028 2.7-1.914 4.172-2.6a7 7 0 0 1-.4.523c-.442.533-1.028 1.134-1.681 1.804l-.51.524zm3.346-3.357C9.594 3.147 6.045 6.8 3.149 10.678c.007-.464.121-1.086.37-1.806.533-1.535 1.65-3.415 3.455-4.976 1.807-1.561 3.746-2.36 5.31-2.68a8 8 0 0 1 1.564-.173"/>
+              </svg> {{post.user.name}}</h6>
+        </div>
+        <div id="post-content">
+            <p>{{post.content}}</p>
+        </div>
+            <div id="tag-box">
+            {% for tag in post.tags%}
+            <span class="badge rounded-pill bg-info text-light badge-sm">{{tag.name}}</span>
+            {%endfor%}
+
+            </div>
+    </div>
+    <div class="inner-right">
+
+        <div id="collaborators">
+            <h5>Collaborators:</h5>
+                {% if post.collaborators|length == 0%}
+                    <h6> ** empty **</h6>
+                {% endif %}
+                {% for collaborator in post.collaborators %}
+                <img class="profile-picture-coll" src="{{ url_for('static', filename='avatars/' + collaborator.avatar.avatar_url_s) }}" alt="Profile Picture1">
+                <span>{{ collaborator.name }}</span>
+                {% endfor %}
+            
+        </div>
+        {% if user and post.user_id == user.id %}
+        <!-- Edit button for the author -->
+        
+        <button class="btn btn-primary project-btn">Edit Post</button>
+        {% else %}
+        <!-- Button for non-author users -->
+        <!-- <button class="btn btn-secondary project-btn">Another Action</button> -->
+        {% endif %}
+    </div>
+   
+    
+  
+</div>
+
+
+<div id="message-box">
+
+    
+    <div id="messageAccordion" class="accordion">
+        {% for message in messages %}
+        <div class="card">
+            <div class="card-header" style="padding: 5px;">
+                <h6 class="mb-0">
+                    <button class="btn btn-link {% if user and message.sender_id == user.id %} bold-text {%endif%}" type="button" data-toggle="collapse" data-target="#collapse{{ message.id }}" aria-expanded="true" aria-controls="collapse{{ message.id }}">
+                        {{ message.sender.name }} - {{ message.timestamp.strftime('%m-%d %Y' ) }}
+                    </button>
+
+                    {% if user and post.user_id == user.id %}
+                    <!-- Edit buttons for the author -->
+                    <!-- NEED FIXING -->
+                        {% if post.message_status_by_recipient(user.id) == 1 %}
+                        <button class="btn btn-primary float-right" disabled>Accepted</button>
+                        {% elif post.message_status_by_recipient(user.id) == 2 %}
+                        <button class="btn btn-danger float-right" disabled>Denied</button>
+                        <form action="{{ url_for('message_controller.handle_message', message_id=message.id, post_id = post.id, action='delete') }}"  class="float-right"method="post" >
+                            <button class="btn btn-primary" type="submit">undenied</button>
+                        </form>
+                        {% else %}
+                        <form action="{{ url_for('message_controller.handle_message', message_id=message.id, post_id = post.id,action='deny') }}" class="float-right" method="post" >
+                            <button class="btn btn-danger " type="submit">Deny</button>
+                        </form>
+                        <form action="{{ url_for('message_controller.handle_message', message_id=message.id,post_id = post.id, action='accept') }}" class="float-right" method="post">
+                            <button class="btn btn-primary " type="submit">Accept</button>
+                        </form>
+                        {%endif%}
+                {% else %}
+                {% if user and message.sender_id == user.id %}
+                {% if post.message_status(user.id) == 0 %}
+                <!-- Delete button for other users -->
+                <form action="{{ url_for('message_controller.handle_message', message_id=message.id, post_id = post.id, action='delete') }}"  class="float-right"method="post" >
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+                <form action="{{ url_for('message_controller.handle_message', message_id=message.id, post_id = post.id, action='delete') }}" class="float-right" method="post" >
+                    <button class="btn btn-primary" type="submit">Edit</button>
+                </form>
+                {% elif post.message_status(user.id) == 1 %}
+                    <button class="btn btn-success float-right" disabled>Accepted</button>
+                    
+                    {% elif post.message_status(user.id) == 2 %}
+                    <button class="btn btn-danger float-right" disabled>Denied</button>    
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                </h6>
+            </div>
+    
+            <div id="collapse{{ message.id }}" class="collapse" aria-labelledby="heading{{ message.id }}" data-parent="#messageAccordion">
+                <div class="card-body">
+                    {{ message.message_content }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // When a radio button is clicked
+        $('input[name="messageFilter"]').click(function () {
+            // Get the URL from the data-url attribute of the clicked button
+            var url = $(this).data('url');
+
+            // Redirect the user to the specified URL
+            window.location.href = url;
+        });
+    });
+</script>
+{%endblock%}

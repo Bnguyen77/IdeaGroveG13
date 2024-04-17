@@ -43,11 +43,16 @@ class User(db.Model):
         return cls.query.filter_by(email=email).first()
     
     
+    def get_user_skills(self):
+        return self.skills
+    
+    
     def add_skills(self, tag_ids):
         from .tag import Tag
         selected_tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
         self.skills = selected_tags
         db.session.commit() 
+    
     
     def generate_avatar(self):
     # Generate a random Identicon avatar URL

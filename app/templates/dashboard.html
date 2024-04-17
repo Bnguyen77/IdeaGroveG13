@@ -1,82 +1,360 @@
-
 {% extends "partials/_layout.html" %} {% include "partials/_header.html" %}
 {%block content%}
 <!-- User is in session -->
-<h2>Welcome, {{ session['user_name'] }}!</h2>
 
-{% include "partials/main_partials/_post.html" %}
 
-<div id = "filter-box" style="width: 70%; margin: 5px auto; 
-height: 30px; border: 2px solid white">
-<label for="category-select">Filter by Category:</label>
-<select id="category-select" onchange="filterPosts()"
-style="float: right; padding: 5px; margin-right: 10px">
-    <option value="{{ url_for('views.index', category='all') }}">All Posts</option>
-    <option value="{{ url_for('views.index', category='related') }}">Most Related</option>
-    <option value="{{ url_for('views.index', category='lastest') }}">lastest to earliest</option>
-    <option value="{{ url_for('views.index', category='earliest') }}">earliest to lastest</option>
-    <!-- Add more options for different categories -->
-</select>
-</div>
-
-<div id="feed-box" style = "margin-left: 20px; 
-width: 100%;
-padding: 20px;">
-
-    {% for post in posts %}
-    {% with post_data=post %}
-        {% include "partials/main_partials/_feed.html" %}
-    {% endwith %}    
-    {%endfor%}
+<!-- {% include "partials/main_partials/_post.html" %} -->
+<style>
+	.profile-picture {
+		margin: 10px; /* Adjust the margin as needed */
+		border-radius: 50%;
+		border: 3px solid rgb(116, 116, 116);
+		overflow: hidden;
+		width: 85px; /* Adjust the width as needed */
+		height: 80px; /* Adjust the height as needed */
+		transition: transform 0.3s ease;
+	}
+	.profile-picture:hover{
+		transform: scale(1.1);
+	}
+	.profile-picture img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+    #query-search{
+        width: 50%;
+        float: left;
+        display: flex;
+    }
+    #filter-box{
 	
+        width: 70%; margin: 5px auto; height: 30px; 
+    }
+	#category-box{
+		margin: 0 20px;
+		float: right;
+	}
+	.user-box{
+		display: flex;
+        align-items: center;
+        margin: auto;
+        margin-top: 60px;
+        width: 70%;
+        height: 15%;
+        
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+	}
+	.user-info{
+		width: 50%;
+		height: 80%; /* Adjust height to match the user box height */
+	}
+	.post-container {
+		background-image: linear-gradient(
+			rgba(255, 255, 255, 0.9),
+			rgba(255, 255, 255, 0.5)
+		);
+		display: flex;
+		width: 100%; /* Set the overall width to 70% of the page */
+		margin: auto; /* Center the post container horizontally */	
+	}
+	.post-form {
+		opacity: 1;
+		width: 85%;
+		/* Your existing styles for the post form */
+		/* Add padding, border, background color, etc. as needed */
+		flex-grow: 9; /* Allow the post-form to take remaining space */
+	}
+	#post-title {
+		height: 40px;
+		width: 80%;
+		margin: 10px 0;
+	}
+	#post-text {
+		width: 100%;
+		/* Your existing styles for the textarea */
+		/* Make the textarea take the full width of the post-form */
+	}
+
+	#feed-box {
+		margin-top: 20px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+	}
+
+	#post-btn {
+		width: 150px;
+		margin: 10px 0px;
+		padding: 5px 15px;
+		float: right;
+	}
+
+	#post-form {
+		display: flex;
+		align-items: center; /* Align items vertically */
+		justify-content: space-between; /* Align items horizontally with space between */
+
+	}
+	#tag-container {
+		border-right: 4px solid rgb(207, 207, 207);
+		padding: 5px 0px;
+		inline-size: 100%;
+		display: flex; /* Use flexbox to control layout */
+		flex-wrap: wrap; /* Allow tags to wrap into multiple lines */
+		white-space: nowrap; /* Prevent wrapping */
+	}
+	#post-tags {
+		display: inline-flex; /* Display tags side by side */
+		flex-wrap: wrap; /* Allow tags to wrap into multiple lines */
+	}
+	
+	.tag-item {
+		margin-right: 5px; /* Adjust the spacing between tags */
+		margin-bottom: 5px; /* Add margin between rows of tags */
+	}
+	/* Optional: Style for the scrollbar */
+	#tag-container::-webkit-scrollbar {
+		height: 10px; /* Adjust the height of the scrollbar */
+	}
+	
+	#tag-container::-webkit-scrollbar-thumb {
+		background-color: #888; /* Color of the scrollbar thumb */
+		border-radius: 5px; /* Border radius of the thumb */
+	}
+
+
+	/* CSS for unchecked badges */
+	.tag-item input[type="checkbox"] + label {
+		background-color: #6c757d; /* Set to badge-secondary color */
+		transform: scale(1); /* Initial scale */
+		font-size: 1rem;
+		transition: transform 0.2s ease; /* Smooth transition */
+	}
+	
+	/* CSS for checked badges */
+	.tag-item input[type="checkbox"]:checked + label {
+		background-color: #007bff; /* Set to badge-primary color */
+		transform: scale(1.2); /* Scale up by 20% */
+	}
+
+	.modal-dialog {
+			max-height: 80vh; /* Set the maximum height of the modal to 80% of the viewport height */
+			height: 80vh;
+			max-width: 80%; /* Set the maximum width of the modal */
+			width: 80%; /* Set the width of the modal */
+		}
+	#post-modal-body {
+			height: auto;
+		}
+		
+	#feed-box{
+		margin: auto;
+		margin-top: 12px;
+		width: 60%;
+		box-shadow: 28px 30px 34px 0px rgba(0,0,0,0.50);
+	}
+
+	#empty{
+		display: flex; /* Use flexbox for centering */
+    	justify-content: center; /* Horizontally center content */
+    	align-items: center; 
+		margin: auto;
+		width: 100%;
+		height: 400px;
+		opacity: 0.5;
+		background-image: linear-gradient(
+			rgba(255, 255, 255, 0.1),
+			rgba(255, 255, 255, 0.782)
+		);
+	}
+	#empty h3{
+		margin: 20px;
+	}
+</style>
+
+<div class="user-box">
+	<div class="profile-picture">	
+		<a href="{{ url_for('views.user_route') }}">
+		<img
+			id="avatar"
+			src="{{ url_for('static', filename='avatars/' + user.avatar.avatar_url_s) }}"
+			alt="Avatar"
+		/>
+	</a>
+	</div>
+	<div class="user-info">
+		<h3> {{user.name}}</h3>
+		<h6> @ {{user.email}}</h6>
+	</div>
 </div>
-<div class="modal fade"  id="messagesModal" tabindex="-1" role="dialog" aria-labelledby="messagesModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content" style = "height: 500px" >
-            <div class="modal-header">
-                <h5 class="modal-title" id="messagesModalLabel">Messages</h5>
-            </div>
 
-            <div class="modal-body" >
+<div id="filter-box">
+	<button type="button" id="create-post-btn" class="btn btn-primary" data-toggle="modal" data-target="#postModal">
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16" style="margin-right: 5px;">
+			<path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+			<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+		</svg>
+		Create Post
+	</button>
+	<select id="category-select"  style="float: right; padding: 5px; margin-right: 10px;">
+		<option value="latest">Latest</option>
+		<option value="earliest">Earliest</option>
+		<option value="related">Most Related</option>
+	</select>
+	<div class="btn-group" id="category-box" role="group" aria-label="Basic radio toggle button group">
+		<input type="radio" class="btn-check" name="category" id="btnradio-all" autocomplete="off" value="all">
+		<label class="btn btn-info" for="btnradio-all" data-url="{{ url_for('views.index', category='all') }}">All Posts</label>
+	
+		<input type="radio" class="btn-check" name="category" id="btnradio-your" autocomplete="off" value="your">
+		<label class="btn btn-info" for="btnradio-your" data-url="{{ url_for('views.index', category='your') }}">Your Posts</label>
+	
+		<input type="radio" class="btn-check" name="category" id="btnradio-other" autocomplete="off" value="other">
+		<label class="btn btn-info" for="btnradio-other" data-url="{{ url_for('views.index', category='other') }}">Other Posts</label>
+	
+		<button type="button" class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+			Current <svg xmlns="http://www.w3.org/2000/svg" width="20"  height="20" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+				<path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+				<path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+			  </svg>
+		</button>
+		<ul class="dropdown-menu">
+			<li>
+				<input type="radio" class="btn-check" name="category" id="btnradio-pending" autocomplete="off" value="pending">
+				<label class="dropdown-item" for="btnradio-pending" data-url="{{ url_for('views.index', category='pending') }}">Pending</label>
+			</li>
+			<li>
+				<input type="radio" class="btn-check" name="category" id="btnradio-denied" autocomplete="off" value="denied">
+				<label class="dropdown-item" for="btnradio-denied" data-url="{{ url_for('views.index', category='denied') }}">Denied</label>
+			</li>
+				<input type="radio" class="btn-check" name="category" id="btnradio-accepted" autocomplete="off" value="accepted">
+				<label class="dropdown-item" for="btnradio-accepted" data-url="{{ url_for('views.index', category='accepted') }}">Accepted</label>
+			</li>
+		</ul>
+	</div>
+	
+	
 
-				<div class="accordion" id="accordionExample">
+</div>
+<!-- Modal -->
+<div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="postModalLabel">Create Post</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		
+		<div class="modal-body" id="post-modal-body">
+		  <!-- Place the content of the post-container here -->
+		  <div class="post-container">
+			<form class="post-form" id="postForm" method="POST" action="{{ url_for('post_controller.create_post') }}">
+				<input type="text" id="post-title" name="title" placeholder="Enter a title" required/>
 
-					{% for message in messages %}
-                    <div class="card">
-                        <div class="card-header" id="heading{{ message.id }}">
-                            <h4 class="mb-0"> 
-                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ message.id }}" aria-expanded="true" aria-controls="collapse{{ message.id }}">
-                                    <span style="color: black;">{{ message.sender.name }}</span>
-                                </button>
-                            </h4>
-                        </div>
-                        
-                        <div id="collapse{{ message.id }}" class="collapse" aria-labelledby="heading{{ message.id }}" data-parent="#accordionExample">
-                            <div class="card-body">
-                                {{ message.message_content }}
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-					
-					
+				<textarea
+				id="post-text" name="content" required
+				placeholder="Describe your idea here..."
+				></textarea>
+				<!-- <button class="btn btn-primary" id="post-btn" type="submit" role="button">create post</button> -->
+				<div id="tag-container">
+					<div id="post-tags">
+						{% for tag in available_tags %}
+						<div class="tag-item">
+							<input type="checkbox" name="tags" class="btn-check" value="{{ tag.id }}" id="btn-check-{{ tag.id }}" autocomplete="off" onchange="limitSelection()" />
+							<label class="badge" value="{{ tag.name }}" for="btn-check-{{ tag.id }}">{{ tag.name }}</label>
+						</div>
+						{% endfor %}
+					</div>
 				</div>
-       
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    function filterPosts() {
-        var select = document.getElementById("category-select");
-        var selectedValue = select.value;
+			</form>
+			</div>
+		</div>
+		<!-- Modal footer (optional) -->
+		<div class="modal-footer">
+			<button class="btn btn-primary" id="post-btn" type="submit" onclick="submitForm()" role="button">create post</button>
 
-        // Redirect to the dashboard page with the selected category
-        window.location.href = selectedValue;
+		</div>
+	  </div>
+	</div>
+  </div>
+
+<div id="feed-box">
+	{% if posts|length == 0 %}
+	
+		<div id="empty">
+			<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor" class="bi bi-emoji-frown" viewBox="0 0 16 16">
+				<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+				<path d="M4.285 12.433a.5.5 0 0 0 .683-.183A3.5 3.5 0 0 1 8 10.5c1.295 0 2.426.703 3.032 1.75a.5.5 0 0 0 .866-.5A4.5 4.5 0 0 0 8 9.5a4.5 4.5 0 0 0-3.898 2.25.5.5 0 0 0 .183.683M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5m4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5"/>
+			  </svg>
+			<h3> Nothing to show</h3> 
+		</div>
+	{% endif %}
+	{% for post in posts %} {% with post_data=post %}
+	 {% include"partials/main_partials/_feed.html" %}
+	 {% endwith %} {%endfor%}
+</div>
+
+
+
+
+<script>
+	
+// Initialize variables to store the last selected category and order
+var lastCategory = 'all'; // Default value
+var lastOrder = 'latest'; // Default value
+
+// Function to filter posts
+function filterPosts() {
+    var category = document.querySelector('input[name="category"]:checked').value;
+    var order = document.getElementById('category-select').value;
+
+    // Update lastCategory and lastOrder only if the user selected a different category or order
+    if (lastCategory !== category) {
+        lastCategory = category;
+    }
+
+    if (lastOrder !== order) {
+        lastOrder = order;
+    }
+
+    var url = '/?category=' + lastCategory + '&order=' + lastOrder;
+    window.location.href = url;
+}
+
+// Add an event listener to the button group to update the category when clicked
+document.getElementById('category-box').addEventListener('click', function(event) {
+    // Check if the clicked element is a radio button
+    if (event.target.matches('input[type="radio"]')) {
+        // Update lastCategory
+        lastCategory = event.target.value;
+        // Call the filterPosts function
+        filterPosts();
+    }
+});
+
+// Add an event listener to the dropdown to update the order when changed
+document.getElementById('category-select').addEventListener('change', function() {
+    // Update lastOrder
+    lastOrder = this.value;
+    // Call the filterPosts function
+    filterPosts();
+});
+
+
+	function submitForm() {
+        document.getElementById("postForm").submit();
+    }
+
+	function limitSelection() {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        if (checkboxes.length > 5) {
+            alert("You can only select up to 5 tags.");
+            // Uncheck the last checked checkbox
+            checkboxes[checkboxes.length - 1].checked = false;
+        }
     }
 </script>
 
- {%endblock%}
+{%endblock%}

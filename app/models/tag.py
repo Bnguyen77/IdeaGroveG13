@@ -12,9 +12,9 @@ class Tag(db.Model):
     
     def create_initial_tags():
         initial_tags = [
-        'Python', 'JavaScript', 'Java', 'C++', 'HTML', 'CSS', 'React', 'Angular',
-        'Node.js', 'Django', 'Flask', 'Spring', 'Ruby', 'Rails', 'PHP', 'MySQL',
-        'MongoDB', 'PostgreSQL', 'Git', 'Docker', 'Kubernetes', 'AWS', 'Azure'
+       'Mathematics', 'Physics', 'Chemistry', 'Biology', 'Computer Science',
+    'Electrical Engineering', 'Mechanical Engineering', 'Environmental Science', 'logistics', 'health',
+    'Philosophy', 'Languages', 'Art', 'Music', 'Architecture', 'Education', 'Business', 'Game Design', 'Hospitality'
         ]
         # Check if tags already exist
         existing_tags = Tag.query.filter(Tag.name.in_(initial_tags)).all()

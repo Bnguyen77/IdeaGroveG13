@@ -9,7 +9,7 @@ db = SQLAlchemy()
 def init_app(app):
     # Configure the Flask app
     app.config['SECRET_KEY'] = 'your_secret_key'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///local1.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///local.db'
     app.config['TEMPLATES_AUTO_RELOAD'] = True  # Ensure that templates are auto-reloaded during development
 
     from .user import User
@@ -26,7 +26,8 @@ def init_app(app):
     with app.app_context():
     
         db.create_all()
-        
+        Tag.create_initial_tags()
+   
     return app
     
     

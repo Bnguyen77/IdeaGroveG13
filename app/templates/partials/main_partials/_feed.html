@@ -2,13 +2,23 @@
 <style>
     .feed-container {
         display: flex;
-        width: 70%;
+        width: 100%;
         margin: auto;
-        border: 1px solid #ccc; /* Add border for feed container */
-        padding: 10px; /* Add padding for feed container */
-        background-image: linear-gradient( rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.6));
+        padding: 0 0 10px 0;
+        border-top: 1px solid rgb(104, 104, 104);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        height: 150px;
+        overflow-y: hidden;
+        background-image: linear-gradient( rgb(147, 147, 147), rgba(255, 255, 255, 0.6));
     }
     
+    .my-profile-box{
+        background-image: linear-gradient( rgba(46, 81, 105, 0.7), rgba(255, 255, 255, 0.6));
+        .profile-picture1{
+            border: 2px solid rgb(28, 114, 42);
+        }
+    }
+
     .profile-picture1 {
         border: 3px solid rgb(116, 116, 116);
         background-image: linear-gradient( rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
@@ -27,7 +37,7 @@
     }
     
     .feed-content {
-        background-image: linear-gradient( rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9));
+        background-image: linear-gradient( rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
         width: 85%;
         padding: 10px;
         flex-grow: 8;
@@ -75,46 +85,96 @@
         max-height: 200px; /* Adjust the value as needed */
         overflow-y: auto; /* Enable vertical scrolling */
     }
+    .badge-sm {
+        font-size: 0.8rem; /* Adjust the font size as needed */
+        padding: 0.2rem 0.4rem; /* Adjust the padding as needed */
+    }
     
+    .denied-box{
+        background-image: linear-gradient( rgba(188, 71, 71, 0.7), rgba(127, 127, 127, 0.6));
+        .profile-picture1{
+            border: 2px solid rgb(28, 114, 42);
+        }
+    }
+    .accepted-box{
+        background-image: linear-gradient( rgba(29, 159, 77, 0.9), rgba(255, 255, 255, 0.6));
+        .profile-picture1{
+            border: 2px solid rgb(28, 114, 42);
+        }
+    }
 </style>
 
-<div class="feed-container">
-	<div class="profile-picture1">
-		<!-- Add the profile picture of the user who made the post -->
-        <span  tabindex="0" data-toggle="tooltip" title="{{post_data.user.name}}">
-            <img 
-            id="avatar"
-            src="{{ url_for('static', filename='avatars/' + post_data.user.avatar.avatar_url_s) }}"
-            alt="Avatar"
-        />
-        </span>
+<div class="feed-container  position-relative 
+{% if post_data.user.id == session.get('user_id') %} my-profile-box {% endif %}
+{% if post_data.message_status(session.get('user_id')) == 2 %} denied-box {% endif %}
+{% if post_data.message_status(session.get('user_id')) == 1 %} accepted-box {% endif %}
+">
+	<div class="profile-picture1 ">
+
+        {% if post_data.get_post_messages(0) and session.user_id == post_data.user_id %}
+        <button type="button" data-toggle="modal" data-target="#messagesModal" class="btn btn-primary position-absolute top-10 start-10 translate-middle badge rounded-pill bg-danger">
+            {{ post_data.get_post_messages()|length }} <span class="visually-hidden">unread messages</span>
+        </button> 
+        {% endif %}
+     
+
+    
+    <img 
+    id="avatar"
+    src="{{ url_for('static', filename='avatars/' + post_data.user.avatar.avatar_url_s) }}"
+    alt="Avatar"
+    />       
 	</div>
 	<div class="feed-content">
+      
 		<!-- Display the title and description of the post made by other user -->
-		<h4>{{post_data.title}}
-            {% for tag in post_data.tags%}
+		<h4>
+            {% if  post_data.message_status(session.user_id) == 2 %}
+            <del>{{ post_data.title }}</del>
+            {%else%}
+            <a href="{{ url_for('views.project', post_id=post_data.id )}}" class="post-tag">
+                {{ post_data.title }}
+            </a>
+            {%endif%}
+            <!-- {% for tag in post_data.tags%}
             <span class="badge rounded-pill bg-info text-light badge-sm">{{tag.name}}</span>
-            {%endfor%}
+            {%endfor%} -->
         </h4>
         <h6><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-feather" viewBox="0 0 16 16">
             <path d="M15.807.531c-.174-.177-.41-.289-.64-.363a3.8 3.8 0 0 0-.833-.15c-.62-.049-1.394 0-2.252.175C10.365.545 8.264 1.415 6.315 3.1S3.147 6.824 2.557 8.523c-.294.847-.44 1.634-.429 2.268.005.316.05.62.154.88q.025.061.056.122A68 68 0 0 0 .08 15.198a.53.53 0 0 0 .157.72.504.504 0 0 0 .705-.16 68 68 0 0 1 2.158-3.26c.285.141.616.195.958.182.513-.02 1.098-.188 1.723-.49 1.25-.605 2.744-1.787 4.303-3.642l1.518-1.55a.53.53 0 0 0 0-.739l-.729-.744 1.311.209a.5.5 0 0 0 .443-.15l.663-.684c.663-.68 1.292-1.325 1.763-1.892.314-.378.585-.752.754-1.107.163-.345.278-.773.112-1.188a.5.5 0 0 0-.112-.172M3.733 11.62C5.385 9.374 7.24 7.215 9.309 5.394l1.21 1.234-1.171 1.196-.027.03c-1.5 1.789-2.891 2.867-3.977 3.393-.544.263-.99.378-1.324.39a1.3 1.3 0 0 1-.287-.018Zm6.769-7.22c1.31-1.028 2.7-1.914 4.172-2.6a7 7 0 0 1-.4.523c-.442.533-1.028 1.134-1.681 1.804l-.51.524zm3.346-3.357C9.594 3.147 6.045 6.8 3.149 10.678c.007-.464.121-1.086.37-1.806.533-1.535 1.65-3.415 3.455-4.976 1.807-1.561 3.746-2.36 5.31-2.68a8 8 0 0 1 1.564-.173"/>
           </svg> {{post_data.user.name}}</h6>
-		<p>{{post_data.content}}</p>
+
+          {% if  post_data.message_status(session.user_id) == 2 %}
+                
+                {%else%}
+                <p>{{post_data.content}}</p>
+                {%endif%}
+
         {% if session.user_id != post_data.user_id %}
+        {% if  post_data.message_status(session.user_id) == 0 %}
+        <button class="btn btn-secondary" id="colab-btn" disabled> Pending </button>
+        {% elif post_data.message_status(session.user_id) == 2 %}
+        <button class="btn btn-danger" id="colab-btn" disabled> Request Denied </button>
+        {% elif post_data.message_status(session.user_id) == 1 %}
+        <button class="btn btn-success" id="colab-btn" disabled> Request Accepted </button>
+        {%else%}
+          
+        
         <button class="btn btn-primary" data-toggle="modal" data-target="#collaborationModal" id="colab-btn" data-username="{{ post_data.user.name }}">request for collaboration</button>
         
-
-        <!-- MODAL FOR -->
+        
+        <!-- MODAL FOR COLAB REQUEST-->
         <div class="modal fade" id="collaborationModal" tabindex="-1" role="dialog" aria-labelledby="collaborationModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-content">
+                    <div class="modal-header">
                   <h5 class="modal-title" id="collaborationModalLabel">Collaboration Request for {{post_data.user.name}}</h5>
                 </div>
                 
                 <form id="sendMessageForm" method ="POST" action = "{{ url_for('message_controller.send_message') }}">
                         <div class="modal-body">
                             <input type="hidden" id="recipient_id" name="recipient_id" value="{{ post_data.user.id }}">
+                            <input type="hidden" id="post_id" name="post_id" value="{{ post_data.id }}">
                         <div class="form-group" >
                             <label for="collaborationMessage">Message:</label>
                             <textarea class="form-control" id="collaborationMessage" name="message_content" rows="3" required></textarea>
@@ -129,10 +189,13 @@
             </div>
           </div>
 
-
+          {% endif %}
         {% endif %}
+       
     </div>
 </div>
+
+
 
 
 

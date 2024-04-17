@@ -1,0 +1,152 @@
+<style>
+	.post-container {
+		background-image: linear-gradient(
+			rgba(255, 255, 255, 0.9),
+			rgba(255, 255, 255, 0.5)
+		);
+		display: flex;
+		width: 70%; /* Set the overall width to 70% of the page */
+		margin: auto; /* Center the post container horizontally */
+		margin-top: 50px;
+		
+	}
+
+	.profile-picture {
+		margin: 10px; /* Adjust the margin as needed */
+		border-radius: 50%;
+		border: 3px solid rgb(116, 116, 116);
+		overflow: hidden;
+		width: 85px; /* Adjust the width as needed */
+		height: 80px; /* Adjust the height as needed */
+		transition: transform 0.3s ease;
+	}
+
+	.profile-picture:hover{
+		transform: scale(1.1);
+	}
+
+	.profile-picture img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.post-form {
+		opacity: 0.9;
+		width: 85%;
+		/* Your existing styles for the post form */
+		/* Add padding, border, background color, etc. as needed */
+		flex-grow: 9; /* Allow the post-form to take remaining space */
+	}
+	#post-title {
+		height: 40px;
+		width: 80%;
+		margin: 10px 0;
+	}
+	#post-text {
+		width: 100%;
+		/* Your existing styles for the textarea */
+		/* Make the textarea take the full width of the post-form */
+	}
+
+	#post-btn {
+		width: 150px;
+		margin: 10px 0px;
+		padding: 5px 15px;
+		float: right;
+	}
+
+
+
+	#post-form {
+		display: flex;
+		align-items: center; /* Align items vertically */
+		justify-content: space-between; /* Align items horizontally with space between */
+
+	}
+	#tag-container {
+		border-right: 4px solid rgb(207, 207, 207);
+		padding: 5px 0px;
+		inline-size: 80%;
+		display: flex; /* Use flexbox to control layout */
+		flex-wrap: wrap; /* Allow tags to wrap into multiple lines */
+		white-space: nowrap; /* Prevent wrapping */
+	}
+	#post-tags {
+		display: inline-flex; /* Display tags side by side */
+		flex-wrap: wrap; /* Allow tags to wrap into multiple lines */
+	}
+	
+	.tag-item {
+		margin-right: 5px; /* Adjust the spacing between tags */
+		margin-bottom: 5px; /* Add margin between rows of tags */
+	}
+	/* Optional: Style for the scrollbar */
+	#tag-container::-webkit-scrollbar {
+		height: 10px; /* Adjust the height of the scrollbar */
+	}
+	
+	#tag-container::-webkit-scrollbar-thumb {
+		background-color: #888; /* Color of the scrollbar thumb */
+		border-radius: 5px; /* Border radius of the thumb */
+	}
+
+	#is-question{
+		margin: 15px 25px 0px 10px;
+		float: right;
+	}
+
+
+
+	    /* CSS for unchecked badges */
+		.tag-item input[type="checkbox"] + label {
+			background-color: #6c757d; /* Set to badge-secondary color */
+			transform: scale(1); /* Initial scale */
+			font-size: 1rem;
+			transition: transform 0.2s ease; /* Smooth transition */
+		}
+		
+		/* CSS for checked badges */
+		.tag-item input[type="checkbox"]:checked + label {
+			background-color: #007bff; /* Set to badge-primary color */
+			transform: scale(1.2); /* Scale up by 20% */
+		}
+</style>
+
+
+<div class="post-container">
+	<div class="profile-picture">	
+		<a href="{{ url_for('views.user_route') }}">
+		<img
+			id="avatar"
+			src="{{ url_for('static', filename='avatars/' + user.avatar.avatar_url_s) }}"
+			alt="Avatar"
+		/>
+	</a>
+	</div>
+	<form class="post-form" method="POST" action="{{ url_for('post_controller.create_post') }}">
+		<input type="text" id="post-title" name="title" placeholder="Enter a title" required/>
+		<div class="form-check form-switch" id = "is-question">
+			<input class="form-check-input" name="is_question" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+			<label class="form-check-label" for="flexSwitchCheckChecked">Question?</label>
+		  </div>
+		<textarea
+		id="post-text" name="content" required
+		placeholder="Describe your idea here..."
+		></textarea>
+		<button class="btn btn-primary" id="post-btn" type="submit" role="button">create post</button>
+		<div id="tag-container">
+			<div id="post-tags">
+				{% for tag in available_tags %}
+				<div class="tag-item">
+					<input type="checkbox" name="tags" class="btn-check" value="{{ tag.id }}" id="btn-check-{{ tag.id }}" autocomplete="off" />
+					<label class="badge" value="{{ tag.name }}" for="btn-check-{{ tag.id }}">{{ tag.name }}</label>
+				</div>
+				{% endfor %}
+			</div>
+		
+		</div>
+	</form>
+</div>
+
+

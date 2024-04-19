@@ -1,5 +1,6 @@
 {% extends "partials/_layout.html" %} {% include "partials/_header.html" %}
 {%block content%}
+
 <!-- User is in session -->
 
 
@@ -171,6 +172,14 @@
 	#empty h3{
 		margin: 20px;
 	}
+	#searchInput {
+		border-radius: 20px;
+		display: inline-block;
+		width: 200px;
+		margin: auto;
+
+	}
+	
 </style>
 
 <div class="user-box">
@@ -197,6 +206,7 @@
 		</svg>
 		Create Post
 	</button>
+	<input type="text" id="searchInput" placeholder="Search...">
 	<select id="category-select"  style="float: right; padding: 5px; margin-right: 10px;">
 		<option value="latest">Latest</option>
 		<option value="earliest">Earliest</option>
@@ -292,7 +302,9 @@
 		</div>
 	{% endif %}
 	{% for post in posts %} {% with post_data=post %}
-	 {% include"partials/main_partials/_feed.html" %}
+	<div class="feed">
+		{% include"partials/main_partials/_feed.html" %}
+	</div>
 	 {% endwith %} {%endfor%}
 </div>
 
@@ -300,7 +312,23 @@
 
 
 <script>
-	
+
+	document.getElementById('searchInput').addEventListener('input', function (event) {
+		const searchTerm = event.target.value.toLowerCase();
+		const feedItems = document.querySelectorAll('.feed');
+		console.log (feedItems)
+		feedItems.forEach(function (item) {
+			const title = item.querySelector('.feed-title').textContent.toLowerCase();
+			const author = item.querySelector('.author').textContent.toLowerCase();
+
+			if (title.includes(searchTerm) || author.includes(searchTerm)) {
+				item.style.display = 'block';
+			} else {
+				item.style.display = 'none';
+			}
+		});
+	});
+
 // Initialize variables to store the last selected category and order
 var lastCategory = 'all'; // Default value
 var lastOrder = 'latest'; // Default value
@@ -342,11 +370,9 @@ document.getElementById('category-select').addEventListener('change', function()
     filterPosts();
 });
 
-
 	function submitForm() {
         document.getElementById("postForm").submit();
     }
-
 	function limitSelection() {
         var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
         if (checkboxes.length > 5) {

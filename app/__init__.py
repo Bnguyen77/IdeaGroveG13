@@ -5,6 +5,7 @@ from .routes.views import views
 from .controllers.auth_controller import auth_controller
 from .controllers.post_controller import post_controller
 from .controllers.message_controller import message_controller
+from .controllers.chat_controller import chat_controller
 import os
 
 # Create the Flask application
@@ -19,6 +20,7 @@ app.register_blueprint(views)
 app.register_blueprint(auth_controller)
 app.register_blueprint(post_controller)
 app.register_blueprint(message_controller)
+app.register_blueprint(chat_controller)
 
 # Get the absolute path to the directory containing this script
 basedir = os.path.abspath(os.path.dirname(__file__))

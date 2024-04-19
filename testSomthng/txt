@@ -1,0 +1,65 @@
+function scrollToElement(elementId) {
+    var element = document.getElementById(elementId);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+$(document).ready(function(){
+    $('#chatRoomButton').click(function() {
+        // Get the post ID
+        var postId = $(this).data('post-id');
+        
+        // Make an AJAX request to check if a chat room exists for the post
+        fetch('/get_chat_room', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({postId: postId}),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Check if a chat room exists based on the response
+                if (data.exists) {
+                    // If a chat room exists, update modal title
+                    $('#chatModal .modal-title').text(data.post_title + " Chat");
+                    
+                    // Update the chat room ID input
+                    $('#chatRoomIdInput').val(data.chat_room_id);
+                    
+                    // Display existing messages
+                    var chatMessagesArea = $('#chatMessages');
+                    chatMessagesArea.empty(); // Clear existing messages
+
+                    data.chat_messages.forEach(message => {
+                        // Create a new badge element for the message
+                        // Add a conditional class to align the badge
+                        if (message.sender_id === data.current_user_id) {
+                            var messageBadge = $('<div class="crr-message"></div>');
+                        }else{
+                            var messageBadge = $('<div class="other-message"></div>');
+                        }
+                        messageBadge.text(message.content);
+                        
+                        chatMessagesArea.append(messageBadge);
+                    
+                    });   
+                    
+                    
+                } else {
+                }
+                $('#chatModal').modal('show');
+                $('#chatModal .modal-title').text(data.post_title + " Chat");
+            
+        })
+        .catch(error => {
+            console.error('Error checking chat room:', error);
+            // Handle errors if needed
+        });
+    });
+});

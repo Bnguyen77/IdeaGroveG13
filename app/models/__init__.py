@@ -16,6 +16,7 @@ def init_app(app):
     from .post import Post
     from .tag import Tag   
     from .message import Message   
+    from .chat import Chat,ChatMember,ChatMessage   
     from .notification import Notification
         # Initialize the SQLAlchemy database
     db.init_app(app)
@@ -26,7 +27,7 @@ def init_app(app):
     with app.app_context():
     
         db.create_all()
-        Tag.create_initial_tags()
+        # Tag.create_initial_tags()
    
     return app
     

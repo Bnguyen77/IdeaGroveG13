@@ -89,6 +89,14 @@ class Post(db.Model):
         else:
             return None
         
+    def message_status2(self, user_id, recipient_id):
+        from .message import Message
+        message = Message.query.filter_by(sender_id=user_id,recipient_id =recipient_id, post_id=self.id).first()
+        if message:
+            return message.status
+        else:
+            return None
+        
     def message_status_by_recipient(self, user_id):
         from .message import Message
         message = Message.query.filter_by(recipient_id=user_id, post_id=self.id).first()
@@ -96,6 +104,13 @@ class Post(db.Model):
             return message.status
         else:
             return None
+        
+    def check_collab(self, user_id):
+        # Iterate through collaborators to check if the user_id exists
+        for collaborator in self.collaborators:
+            if collaborator.id == user_id:
+                return True
+        return False
 
     
     def request_accepted(self, user_id):

@@ -1,110 +1,6 @@
 
-<style>
-    .feed-container {
-        display: flex;
-        width: 100%;
-        margin: auto;
-        padding: 0 0 10px 0;
-        border-top: 1px solid rgb(104, 104, 104);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-        height: 150px;
-        overflow-y: hidden;
-        background-image: linear-gradient( rgb(147, 147, 147), rgba(255, 255, 255, 0.6));
-    }
-    
-    .my-profile-box{
-        background-image: linear-gradient( rgba(46, 81, 105, 0.7), rgba(255, 255, 255, 0.6));
-        .profile-picture1{
-            border: 2px solid rgb(28, 114, 42);
-        }
-    }
 
-    .profile-picture1 {
-        border: 3px solid rgb(116, 116, 116);
-        background-image: linear-gradient( rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
-        overflow: hidden;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        margin: 10px;
-        flex-grow: 1;
-    }
-    
-    .profile-picture1 img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .feed-content {
-        background-image: linear-gradient( rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
-        width: 85%;
-        padding: 10px;
-        flex-grow: 8;
-    }
-    
-    h3 {
-        margin-top: 0;
-    }
-    
-    /* Style for feed title and description */
-    .feed-content h3 {
-        font-size: 40px;
-        margin-bottom: 5px;
-    }
-    
-    .feed-content p {
-        margin-left: 20px;
-        font-size: 16px;
-        margin-top: 0;
-    }
-
-    #colab-btn {
-        float: right;
-    }
-
-    .badge-sm {
-        float: right;
-        font-size: 1rem; /* Adjust the font size as needed */
-        padding: 0.4rem 0.5rem; /* Adjust the padding as needed */
-    }
-
-    .modal-body {
-        height: 150px;
-        overflow-y: auto; /* Enable vertical scrolling */
-    }
-
-    .modal-footer {
-        height: 70px;
-    }
-    .modal-footer btn{
-        margin: auto;
-        padding: 2px;
-    }
-    #collaborationMessage {
-        max-height: 200px; /* Adjust the value as needed */
-        overflow-y: auto; /* Enable vertical scrolling */
-    }
-    .badge-sm {
-        font-size: 0.8rem; /* Adjust the font size as needed */
-        padding: 0.2rem 0.4rem; /* Adjust the padding as needed */
-    }
-    
-    .denied-box{
-        background-image: linear-gradient( rgba(188, 71, 71, 0.7), rgba(127, 127, 127, 0.6));
-        .profile-picture1{
-            border: 2px solid rgb(28, 114, 42);
-        }
-    }
-    .accepted-box{
-        background-image: linear-gradient( rgba(29, 159, 77, 0.9), rgba(255, 255, 255, 0.6));
-        .profile-picture1{
-            border: 2px solid rgb(28, 114, 42);
-        }
-    }
-</style>
-
-<div class="feed-container  position-relative 
+<div class="feed-container  
 {% if post_data.user.id == session.get('user_id') %} my-profile-box {% endif %}
 {% if post_data.message_status(session.get('user_id')) == 2 %} denied-box {% endif %}
 {% if post_data.message_status(session.get('user_id')) == 1 %} accepted-box {% endif %}
@@ -128,7 +24,7 @@
 	<div class="feed-content">
       
 		<!-- Display the title and description of the post made by other user -->
-		<h4>
+		<h4 class = "feed-title">
             {% if  post_data.message_status(session.user_id) == 2 %}
             <del>{{ post_data.title }}</del>
             {%else%}
@@ -142,12 +38,14 @@
         </h4>
         <h6><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-feather" viewBox="0 0 16 16">
             <path d="M15.807.531c-.174-.177-.41-.289-.64-.363a3.8 3.8 0 0 0-.833-.15c-.62-.049-1.394 0-2.252.175C10.365.545 8.264 1.415 6.315 3.1S3.147 6.824 2.557 8.523c-.294.847-.44 1.634-.429 2.268.005.316.05.62.154.88q.025.061.056.122A68 68 0 0 0 .08 15.198a.53.53 0 0 0 .157.72.504.504 0 0 0 .705-.16 68 68 0 0 1 2.158-3.26c.285.141.616.195.958.182.513-.02 1.098-.188 1.723-.49 1.25-.605 2.744-1.787 4.303-3.642l1.518-1.55a.53.53 0 0 0 0-.739l-.729-.744 1.311.209a.5.5 0 0 0 .443-.15l.663-.684c.663-.68 1.292-1.325 1.763-1.892.314-.378.585-.752.754-1.107.163-.345.278-.773.112-1.188a.5.5 0 0 0-.112-.172M3.733 11.62C5.385 9.374 7.24 7.215 9.309 5.394l1.21 1.234-1.171 1.196-.027.03c-1.5 1.789-2.891 2.867-3.977 3.393-.544.263-.99.378-1.324.39a1.3 1.3 0 0 1-.287-.018Zm6.769-7.22c1.31-1.028 2.7-1.914 4.172-2.6a7 7 0 0 1-.4.523c-.442.533-1.028 1.134-1.681 1.804l-.51.524zm3.346-3.357C9.594 3.147 6.045 6.8 3.149 10.678c.007-.464.121-1.086.37-1.806.533-1.535 1.65-3.415 3.455-4.976 1.807-1.561 3.746-2.36 5.31-2.68a8 8 0 0 1 1.564-.173"/>
-          </svg> {{post_data.user.name}}</h6>
+          </svg> <span class="author">
+            {{post_data.user.name}}
+          </span> </h6>
 
           {% if  post_data.message_status(session.user_id) == 2 %}
                 
                 {%else%}
-                <p>{{post_data.content}}</p>
+                <p  hidden>{{post_data.content}}</p>
                 {%endif%}
 
         {% if session.user_id != post_data.user_id %}
@@ -160,7 +58,7 @@
         {%else%}
           
         
-        <button class="btn btn-primary" data-toggle="modal" data-target="#collaborationModal" id="colab-btn" data-username="{{ post_data.user.name }}">request for collaboration</button>
+        <button class="btn btn-primary" hidden data-toggle="modal" data-target="#collaborationModal" id="colab-btn" data-username="{{ post_data.user.name }}">request for collaboration</button>
         
         
         <!-- MODAL FOR COLAB REQUEST-->

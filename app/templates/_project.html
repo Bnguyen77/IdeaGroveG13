@@ -46,12 +46,14 @@
       
 }
 .project-btn {
+    border-radius: 20px;
     position: absolute;
     bottom: 10px;
     right: 10px;
 }
 
 .float-right {
+    border-radius: 20px;
     margin-right: 5px;
     float: right;
 }
@@ -106,6 +108,78 @@ form.float-right{
     font-size: medium;
     font-weight: bold;
 }
+
+#chatModal .modal-content {
+    height: 500px;
+    width: 600px;
+}
+
+
+.crr-message{
+    color: white;
+    background-image: linear-gradient(to right, #1c5de0b5, #603ec5a6); /* Gradient from blue to gray */
+    float: right; /* Aligns crr-message to the right */
+    clear: both; /* Ensures crr-message appears below other messages */
+    max-width: 60%;
+    border-radius: 20px;
+    /* Optional: Add margin to separate messages */
+    
+}
+.other-message{
+    color: white;
+    background-image: linear-gradient(to right, #727272b5, #43564fa6); /* Gradient from blue to gray */
+    float: left; /* Aligns other-message to the left */
+    clear: both; /* Ensures other-message appears below crr-message */
+    max-width: 70%;
+    border-radius: 20px;
+    margin-left: 35px;
+    
+}
+
+.crr-message, .other-message {
+    width: fit-content; /* Adjust width to fit content */
+    border: 2px solid rgba(152, 152, 152, 0.546);
+    font-weight: 450;
+    font-size: 16px;
+    padding: 5px;
+    margin-top: 5px;
+    border-radius: 20px;
+    overflow-wrap: break-word;  
+}
+
+#chatMessages {
+    position: relative;
+    flex-direction: column-reverse;
+    /* Ensure overflow is allowed */
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: auto;
+    max-height: 400px; /* Adjust as needed */ 
+}
+
+#end{
+    color: white;
+    float: right; /* Aligns crr-message to the right */
+    clear: both; /* Ensures crr-message appears below other messages */
+    max-width: 60%;
+    border-radius: 20px;
+    margin-bottom: 5px; /* Optional: Add margin to separate messages */
+}
+.sender-circle{
+    border: 2px solid beige;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    text-align: center;
+    float:left;
+    margin-right: 10px;
+}
+
+.first-message{
+    margin-top: 10px;
+    margin-left: 0px;
+}
+
 </style>
 
 
@@ -153,8 +227,10 @@ form.float-right{
                     <h6> ** empty **</h6>
                 {% endif %}
                 {% for collaborator in post.collaborators %}
-                <img class="profile-picture-coll" src="{{ url_for('static', filename='avatars/' + collaborator.avatar.avatar_url_s) }}" alt="Profile Picture1">
-                <span>{{ collaborator.name }}</span>
+                <div style="display: block; margin-bottom: 5px;">
+                    <img class="profile-picture-coll" src="{{ url_for('static', filename='avatars/' + collaborator.avatar.avatar_url_s) }}" alt="Profile Picture1">
+                    <span>{{ collaborator.name }}</span>
+                </div>
                 {% endfor %}
             
         </div>
@@ -165,45 +241,49 @@ form.float-right{
         {% else %}
         <!-- Button for non-author users -->
         <!-- <button class="btn btn-secondary project-btn">Another Action</button> -->
+        
+        
+        <!-- MODAL FOR COLAB REQUEST-->
+        <div class="modal fade" id="collaborationModal" tabindex="-1" role="dialog" aria-labelledby="collaborationModalLabel" aria-hidden="true">
+            <div class="modal-dialog centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                  <h5 class="modal-title" id="collaborationModalLabel">Collaboration Request for {{post.user.name}}</h5>
+                </div>
+                
+                <form id="sendMessageForm" method ="POST" action = "{{ url_for('message_controller.send_message') }}">
+                        <div class="modal-body">
+                            <input type="hidden" id="recipient_id" name="recipient_id" value="{{ post.user.id }}">
+                            <input type="hidden" id="post_id" name="post_id" value="{{ post.id }}">
+                        <div class="form-group" >
+                            <label for="collaborationMessage">Message:</label>
+                            <textarea class="form-control" id="collaborationMessage" name="message_content" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" >Send Request</button>
+                    </div>
+                </form>
+              </div>
+            </div>    
+          </div>
+        <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#collaborationModal" id="colab-btn" data-username="{{ post.user.name }}">request for collaboration</button> -->
         {% endif %}
-        <div class="modal fade" id="editModal" tabindex="" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel" style="font-size: 1.2em;">Edit Order Details <span id="orderIdDisplay"></span></h5> <!-- Increase font size -->
-            </div>
-            <div class="modal-body" style=" display: flex;
-			justify-content: center; padding: 10px; width: auto;"> <!-- Increase padding -->
-                <input type="hidden" id="orderIdInput">
 
-				
-                <div class="form-group editB">
-					<strong><label for="allergiesInput"  class="float-right">Allergies:</label></strong>
-                    <ul id="allergiesList"></ul>
-                </div>
-                <div class="form-group editB">
-					<strong><label for="dietaryRestrictionInput" class="float-right">Dietary Restrictions:</label></strong>
-                    <ul id="dietaryList"  ></ul>
-                </div>
-                <!-- Add other fields for editing -->
-            </div>
-			<div class="modal-footer">
-				<button type="button " id="saveBtn" class="btn btn-primary float-right ">Save Changes</button>
-				<button type="button " id="deleteBtn" class="btn btn-danger float-right ">Delete Order</button>
-			</div>
-        </div>
+        
+        
+        {% if (post.check_collab(user.id)  ) or (post.user_id == user.id and post.collaborators|length != 0) %}
+        <button class="btn btn-primary project-btn" id="chatRoomButton" data-post-id="{{ post_id }}">Chat ROOM</button>
+        {% elif post.user_id != user.id %}
+        <button class="btn btn-primary" data-toggle="modal" data-target="#collaborationModal" id="colab-btn" data-username="{{ post.user.name }}">request</button>
+        {% endif %}
     </div>
-    </div>
-    </div>
-   
-    
-  
 </div>
 
 
-<div id="message-box">
 
-    
+<div id="message-box">
     <div id="messageAccordion" class="accordion">
         {% for message in messages %}
         <div class="card">
@@ -216,10 +296,12 @@ form.float-right{
                     {% if user and post.user_id == user.id %}
                     <!-- Edit buttons for the author -->
                     <!-- NEED FIXING -->
-                        {% if post.message_status_by_recipient(user.id) == 1 %}
-                        <button class="btn btn-primary float-right" disabled>Accepted</button>
-                        {% elif post.message_status_by_recipient(user.id) == 2 %}
+                        {% if post.message_status2( message.sender_id,user.id) == 1 %}
+                        <button class="btn btn-success float-right" disabled>Accepted</button>
+                        
+                        {% elif post.message_status2( message.sender_id, user.id) == 2 %}
                         <button class="btn btn-danger float-right" disabled>Denied</button>
+
                         <form action="{{ url_for('message_controller.handle_message', message_id=message.id, post_id = post.id, action='delete') }}"  class="float-right"method="post" >
                             <button class="btn btn-primary" type="submit">undenied</button>
                         </form>
@@ -262,8 +344,184 @@ form.float-right{
     </div>
 </div>
 
+
+<!-- Chat Modal -->
+<div class="modal fade" id="chatModal" tabindex="-1" role="dialog" aria-labelledby="chatModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="chatModalLabel">Chat Room</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="chatRoomIdInput">
+          <!-- Here you can dynamically populate the chat members -->
+    
+          <div id="chatMessages">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+            <input type="text" id="chatMessageInput" style = "width: 82%" class="form-control" placeholder="Type your message...">
+            <button type="button" class="btn btn-primary float-right" id="sendMessageBtn">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+
+    $(document).ready(function(){
+
+       $('#chatModal').on('shown.bs.modal', function () {
+        var container = document.getElementById('chatMessages');
+                    var targetDiv = document.getElementById('end');
+                    var offsetTop = targetDiv.offsetTop - container.offsetTop;
+                    container.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth', // Optional: Add smooth scrolling effect
+                        duration: 300
+                    });   
+           fetchChatRoomData();
+       });
+
+
+    // Define a function to fetch chat room data and update the chat interface
+    function fetchChatRoomData() {
+        $('#chatRoomButton').click(function() {
+            // Get the post ID
+            var postId = $(this).data('post-id');
+        
+            // Make an AJAX request to check if a chat room exists for the post
+            fetch('/get_chat_room', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({postId: postId}),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Check if a chat room exists based on the response
+                if (data.exists) {
+                    // If a chat room exists, update modal title
+                    $('#chatModal .modal-title').text(data.post_title + " Chat");
+                    // Update the chat room ID input
+                    $('#chatRoomIdInput').val(data.chat_room_id);
+                    // Display existing messages
+                    var chatMessagesArea = $('#chatMessages');
+                    chatMessagesArea.empty(); // Clear existing messages
+                    let current_chat_block_id = 0;
+                    var messageCount = data.chat_messages.length;
+                    var crr_count = 0;
+                    data.chat_messages.forEach(message => {
+                        crr_count ++;
+                            
+                        if (message.sender_id === data.current_user_id) {
+                            var messageBadge = $('<div class="crr-message"></div>');  
+                            messageBadge.append($('<span class="message-content"></span>').text(message.content));
+                               
+                        } else {
+                            var messageBadge = $('<div class="other-message"></div>'); 
+                            if (current_chat_block_id !== message.sender_id){   
+                                current_chat_block_id = message.sender_id;
+                                var senderInitial = message.sender_name[0]; // Assuming sender_name is a string
+                                    var senderCircle = $('<div class="sender-circle"></div>');
+                                    senderCircle.text(senderInitial);
+                                    messageBadge.append(senderCircle)
+                                    messageBadge.append($('<span class="message-content"></span>').text(message.content)); 
+                                    messageBadge.addClass('first-message')   
+                                } else {
+                                messageBadge.append($('<span class="message-content"></span>').text(message.content));    
+                            }
+                        }
+                           
+                            $('.sender-circle, .message-content').css('display', 'inline-block');
+                        chatMessagesArea.append(messageBadge);
+                        if (crr_count == messageCount){
+                            var endD = $('<div id = "end"></div>'); 
+                            chatMessagesArea.append(endD);
+                        }                       
+                    });   
+                    
+                    
+                } else {
+                    // Handle case where no chat room exists
+                }
+                $('#chatModal').modal('show');
+                $('#chatModal .modal-title').text(data.post_title + " Chat");
+            })
+            .catch(error => {
+                console.error('Error checking chat room:', error);
+                // Handle errors if needed
+            });
+        });
+    }
+    fetchChatRoomData()
+    // Call the function every 5 seconds
+    setInterval(fetchChatRoomData, 5000);
+});
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('sendMessageBtn').addEventListener('click', function() {
+            // Step 1: Get the message content
+            var messageContent = document.getElementById('chatMessageInput').value;
+            var chatRoomId = document.getElementById('chatRoomIdInput').value;
+  
+            // Step 2: Check for empty content
+            if (messageContent.trim() !== '') {
+                // Step 3: Send message to server
+                fetch('/add_message_to_chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: messageContent, chat_room_id: chatRoomId }),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Step 4: Server-side handling
+                    if (data.success) {
+                        // Step 5: Update chat interface
+                        // Add the new message to the chat interface in the modal
+                        var messageBadge = $('<div class="crr-message"></div>');
+                        messageBadge.text(messageContent);
+                        
+                        // Append the badge to the chat messages area
+                        $('#chatMessages').append(messageBadge);        
+                        // Step 6: Clear input field
+                        document.getElementById('chatMessageInput').value = '';
+                    } else {
+                        // Handle server error or invalid response
+                        console.error('Error adding message to chat:', data.error);
+                    }
+                })
+                .catch(error => {
+                    // Handle fetch error
+                    console.error('Fetch error:', error);
+                });
+            } else {
+                // Display an error message if the message content is empty
+                alert('Please enter a message.');
+            }
+        });
+    });
+
+
     $(document).ready(function () {
         // When a radio button is clicked
         $('input[name="messageFilter"]').click(function () {

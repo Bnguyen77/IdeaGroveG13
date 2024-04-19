@@ -27,7 +27,7 @@ def init_app(app):
     with app.app_context():
     
         db.create_all()
-        # Tag.create_initial_tags()
+        Tag.create_initial_tags()
    
     return app
     

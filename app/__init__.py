@@ -15,7 +15,6 @@ app = Flask(__name__)
 init_app(app)
 app.permanent_session_lifetime = timedelta(minutes=20)
 
-
 app.register_blueprint(views)
 app.register_blueprint(auth_controller)
 app.register_blueprint(post_controller)

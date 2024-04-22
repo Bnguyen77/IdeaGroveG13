@@ -96,6 +96,14 @@ class Post(db.Model):
             return message.status
         else:
             return None
+                
+    def is_status_message_undefined(self, user_id, recipient_id):
+        from .message import Message
+        message = Message.query.filter_by(sender_id=user_id,recipient_id =recipient_id, post_id=self.id).first()
+        if message:
+            return False
+        else:
+            return True
         
     def message_status_by_recipient(self, user_id):
         from .message import Message

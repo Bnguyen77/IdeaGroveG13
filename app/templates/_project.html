@@ -109,10 +109,11 @@ form.float-right{
     font-weight: bold;
 }
 
-#chatModal .modal-content {
-    height: 500px;
-    width: 600px;
-}
+
+
+
+
+
 
 
 .crr-message{
@@ -122,36 +123,39 @@ form.float-right{
     clear: both; /* Ensures crr-message appears below other messages */
     max-width: 60%;
     border-radius: 20px;
+    border-bottom-right-radius: 0px;
+    margin-right: 10px;
+    border: 2px solid rgba(152, 152, 152, 0.546);
     /* Optional: Add margin to separate messages */
     
 }
 .other-message{
     color: white;
-    background-image: linear-gradient(to right, #727272b5, #43564fa6); /* Gradient from blue to gray */
+    background-image: linear-gradient(to right, #749679b5, #3f9676a6); /* Gradient from blue to gray */
     float: left; /* Aligns other-message to the left */
     clear: both; /* Ensures other-message appears below crr-message */
     max-width: 70%;
-    border-radius: 20px;
+    border-radius:20px 999em 999em 999em ;
     margin-left: 35px;
+    border: 2px solid rgba(152, 152, 152, 0.546);
     
 }
 
 .crr-message, .other-message {
     width: fit-content; /* Adjust width to fit content */
-    border: 2px solid rgba(152, 152, 152, 0.546);
-    font-weight: 450;
-    font-size: 16px;
-    padding: 5px;
+    font-weight: 550;
+    font-size: 15px;
+    padding: 10px;
     margin-top: 5px;
-    border-radius: 20px;
     overflow-wrap: break-word;  
 }
 
 #chatMessages {
+    background-color: rgba(235, 235, 235, 0.397);
     position: relative;
     flex-direction: column-reverse;
     /* Ensure overflow is allowed */
-    overflow-y: auto;
+    overflow-y: visible;
     overflow-x: hidden;
     width: auto;
     max-height: 400px; /* Adjust as needed */ 
@@ -165,6 +169,7 @@ form.float-right{
     border-radius: 20px;
     margin-bottom: 5px; /* Optional: Add margin to separate messages */
 }
+
 .sender-circle{
     border: 2px solid beige;
     width: 30px;
@@ -175,9 +180,36 @@ form.float-right{
     margin-right: 10px;
 }
 
+.chat-btn{
+    position: fixed;
+    padding: 10px;
+    height: fit-content;
+    width: fit-content;
+    left: 93%;
+    top: 83%;
+    scale: 1.5;
+    box-shadow: 5px 8px 21px 2px rgba(0,0,0,0.71);
+    transition: transform 0.3s, scale 0.3s;
+}
+.chat-btn:hover {
+    transform: scale(1.6);
+    background-color: rgb(0, 55, 128);
+}
+
 .first-message{
-    margin-top: 10px;
+    margin-top: 20px;
     margin-left: 0px;
+    border-radius:20px 999em 999em 20px ;
+}
+
+#chatModalContent {
+    height: 600px;
+    width: 600px;
+}
+#postModalContent{
+	height: 500px;
+	width: 100%;
+	margin: auto;
 }
 
 </style>
@@ -236,12 +268,12 @@ form.float-right{
         </div>
         {% if user and post.user_id == user.id %}
         <!-- Edit button for the author -->
+        <button class="btn btn-primary project-btn edit-btn"  id="editBtn{{ post.id }}" data-bs-toggle="modal" data-bs-target="#postModal">Edit Post</button>
         
-        <button class="btn btn-primary project-btn"   data-bs-toggle="modal" data-bs-target="#editModal {{ post.id }}">Edit Post</button>
+        
         {% else %}
         <!-- Button for non-author users -->
-        <!-- <button class="btn btn-secondary project-btn">Another Action</button> -->
-        
+        <!-- <button class="btn btn-secondary project-btn">Another Action</button> --> 
         
         <!-- MODAL FOR COLAB REQUEST-->
         <div class="modal fade" id="collaborationModal" tabindex="-1" role="dialog" aria-labelledby="collaborationModalLabel" aria-hidden="true">
@@ -271,12 +303,14 @@ form.float-right{
         <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#collaborationModal" id="colab-btn" data-username="{{ post.user.name }}">request for collaboration</button> -->
         {% endif %}
 
-        
-        
         {% if (post.check_collab(user.id)  ) or (post.user_id == user.id and post.collaborators|length != 0) %}
-        <button class="btn btn-primary project-btn" id="chatRoomButton" data-post-id="{{ post_id }}">Chat ROOM</button>
-        {% elif post.user_id != user.id %}
-        <button class="btn btn-primary" data-toggle="modal" data-target="#collaborationModal" id="colab-btn" data-username="{{ post.user.name }}">request</button>
+        <button class="btn btn-primary project-btn chat-btn" id="chatRoomButton" data-post-id="{{ post_id }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-dots" viewBox="0 0 16 16">
+            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
+            <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+          </svg></button>
+        {% elif post.user_id != user.id and post.is_status_message_undefined(user.id, post.user_id) == true %}
+        <!-- REQUEST button -->
+        <button class="btn btn-primary project-btn" data-toggle="modal" data-target="#collaborationModal" id="colab-btn" data-username="{{ post.user.name }}">request</button>
         {% endif %}
     </div>
 </div>
@@ -345,10 +379,11 @@ form.float-right{
 </div>
 
 
+
 <!-- Chat Modal -->
 <div class="modal fade" id="chatModal" tabindex="-1" role="dialog" aria-labelledby="chatModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
+    <div class="modal-dialog centered "  role="document">
+      <div class="modal-content" id="chatModalContent">
         <div class="modal-header">
           <h5 class="modal-title" id="chatModalLabel">Chat Room</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -371,9 +406,47 @@ form.float-right{
     </div>
   </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- script for edit -->
 <script>
+    document.querySelectorAll('.edit-btn').forEach(function(button) {
+        button.addEventListener('click', function() {
+            // Retrieve the post ID from the data attribute of the edit button
+            var postId = button.dataset.postId;
+    
+            // Assuming you have a function to retrieve post data from the server
+            fetch('/get_post_data?postId=' + postId)
+                .then(function(response) {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(function(data) {
+                    // Populate the modal form fields with the existing post data
+                    document.getElementById('post-title').value = data.title;
+                    document.getElementById('post-text').value = data.content;
+                    // Assuming tags are stored as an array in the response
+                    data.tags.forEach(function(tag) {
+                        document.getElementById('btn-check-' + tag.id).checked = true;
+                    });
+    
+                    // Change the title of the modal
+                    document.getElementById('postModalLabel').innerText = 'Edit Post';
+    
+                    // Change the form action to the endpoint for updating the post
+                    document.getElementById('postForm').action = '/update_post/' + postId;
+                })
+                .catch(function(error) {
+                    console.error('Error retrieving post data:', error);
+                });
+        });
+    });
+</script>
 
 
+<!-- Script for chat -->
+<script>
     $(document).ready(function(){
 
        $('#chatModal').on('shown.bs.modal', function () {
@@ -433,7 +506,8 @@ form.float-right{
                             var messageBadge = $('<div class="other-message"></div>'); 
                             if (current_chat_block_id !== message.sender_id){   
                                 current_chat_block_id = message.sender_id;
-                                var senderInitial = message.sender_name[0]; // Assuming sender_name is a string
+                                var senderInitial = message.sender_name[0];
+                                // Assuming sender_name is a string
                                     var senderCircle = $('<div class="sender-circle"></div>');
                                     senderCircle.text(senderInitial);
                                     messageBadge.append(senderCircle)
@@ -532,5 +606,6 @@ form.float-right{
             window.location.href = url;
         });
     });
+
 </script>
 {%endblock%}

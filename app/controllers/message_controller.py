@@ -75,10 +75,5 @@ def handle_message(message_id,post_id, action):
         db.session.commit()
         flash('request delete', 'success')
         
-    elif action == 'edit':
-        # Delete the message from the database
-        db.session.delete(message)
-        db.session.commit()
-        flash('request delete', 'success')
-    
+
     return redirect(url_for('views.project', post_id=post_id))

@@ -268,10 +268,13 @@ form.float-right{
         </div>
         {% if user and post.user_id == user.id %}
         <!-- Edit button for the author -->
-        <button class="btn btn-primary project-btn edit-btn"  id="editBtn{{ post.id }}" data-bs-toggle="modal" data-bs-target="#postModal">Edit Post</button>
-        
-        
+        <button hidden class="btn btn-primary project-btn edit-btn"  id="editBtn{{ post.id }}" data-bs-toggle="modal" data-bs-target="#postModal">Edit Post</button>   
         {% else %}
+
+        
+        <script>
+
+        </script>
         <!-- Button for non-author users -->
         <!-- <button class="btn btn-secondary project-btn">Another Action</button> --> 
         
@@ -354,9 +357,7 @@ form.float-right{
                 <form action="{{ url_for('message_controller.handle_message', message_id=message.id, post_id = post.id, action='delete') }}"  class="float-right"method="post" >
                     <button class="btn btn-danger" type="submit">Delete</button>
                 </form>
-                <form action="{{ url_for('message_controller.handle_message', message_id=message.id, post_id = post.id, action='edit') }}" class="float-right" method="post" >
-                    <button class="btn btn-primary" type="submit">Edit</button>
-                </form>
+            
                 {% elif post.message_status(user.id) == 1 %}
                     <button class="btn btn-success float-right" disabled>Accepted</button>
                     

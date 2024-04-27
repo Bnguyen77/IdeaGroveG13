@@ -4,7 +4,6 @@ from . import db
 class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
-
     messages = db.relationship('ChatMessage', backref='chat', lazy=True)
     members = db.relationship('ChatMember', backref='chat', lazy=True)
 

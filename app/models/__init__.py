@@ -2,6 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_avatars import Avatars
 from flask_migrate import Migrate
+
+
 # Create SQLAlchemy instances
 db = SQLAlchemy()
 
@@ -28,6 +30,7 @@ def init_app(app):
     
         db.create_all()
         Tag.create_initial_tags()
+        
    
     return app
     
